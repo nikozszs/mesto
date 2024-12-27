@@ -6,12 +6,12 @@ const createCard = (card) => {
     const cardTemplate = document.querySelector('#card-template').content;
     const cardItem = document.createElement('div');
     cardItem.classList.add('card');
+    cardItem.querySelector('.card__image').src = card.link;
+    cardItem.querySelector('.card__title').textContent = card.name;
     const deleteButton = cardTemplate.querySelector('.card__delete-button').cloneNode(true);
     deleteButton.addEventListener('click', () => {
         card.remove();
     });
-    cardItem.querySelector('.card__image').src = card.link;
-    cardItem.querySelector('.card__title').textContent = card.name;
     return cardItem;
 }
 
