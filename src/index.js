@@ -1,4 +1,6 @@
-import { initialCards } from './scripts/cards.js'
+import { initialCards } from './scripts/cards.js';
+import '../src/pages/index.css';
+
 // @todo: DOM узлы
 const cardTemplate = document.querySelector('#card-template').content;
 const placesList = document.querySelector('.places__list');
