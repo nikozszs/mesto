@@ -1,3 +1,4 @@
+import { initialCards } from './cards.js'
 // @todo: DOM узлы
 const cardTemplate = document.querySelector('#card-template').content;
 const placesList = document.querySelector('.places__list');
