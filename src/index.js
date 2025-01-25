@@ -4,6 +4,12 @@ import '../src/pages/index.css';
 // @todo: DOM узлы
 const cardTemplate = document.querySelector('#card-template').content;
 const placesList = document.querySelector('.places__list');
+const buttonProfileEdit = document.querySelector('.popup_type_edit');
+const buttonProfileAdd = document.querySelector('.popup_type_new-card');
+const cardPopup = document.querySelector('.popup_type_image');
+const popup = document.querySelector('.popup');
+const buttonClose = document.querySelector('.popup__close');
+
 
 // @todo: Функция создания карточки
 const createCard = (card, deleteButtonFunction) => {
@@ -33,6 +39,19 @@ initialCards.forEach(function (card) {
 
 // @todo: открыть попап
 
+buttonProfileEdit.addEventListener ('click', () => {
+  popup.classList.add('popup_is-opened');
+})
+
+// @todo: закрыть попап
 // через крестик
+buttonProfileEdit.addEventListener ('click', () => {
+  popup.classList.remove('popup_is-opened');
+})
 // через esc
+window.addEventListener('keydown', (e) => {
+  if (e.key === 'Escape') {
+    popup.classList.remove('popup_is-opened');
+  }
+});
 // через оверлей
