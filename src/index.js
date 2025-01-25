@@ -30,3 +30,9 @@ initialCards.forEach(function (card) {
   const cloneCard = createCard(card, handleCardDelete);
   placesList.append(cloneCard);
 });
+
+// @todo: открыть попап
+
+// через крестик
+// через esc
+// через оверлей
