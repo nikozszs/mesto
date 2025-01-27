@@ -30,5 +30,4 @@ export function closeModal () {
     }
   });
   // через оверлей
-
 }

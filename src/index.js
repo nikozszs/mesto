@@ -5,7 +5,6 @@ import { openModal, closeModal} from './scripts/modal.js';
 
 // @todo: DOM узлы
 const placesList = document.querySelector('.places__list');
-const newCard = 
 
 // @todo: Вывести карточки на страницу
 initialCards.forEach(function (card) {
@@ -32,7 +31,6 @@ function handleFormSubmit(evt) {
 
     // Вставьте новые значения с помощью textContent
 }
-
 // Прикрепляем обработчик к форме:
 // он будет следить за событием “submit” - «отправка»
 formElement.addEventListener('submit', handleFormSubmit);
