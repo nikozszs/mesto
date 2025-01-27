@@ -18,9 +18,9 @@ export function openModal () {
 export function closeModal () {
     const buttonClose = document.querySelector('.popup__close');
 // через крестик
-    buttonProfileEdit.addEventListener ('click', () => {
-    popup.classList.remove('popup_is-opened');
-    popup.classList.add('popup_is-animated');
+    buttonClose.addEventListener ('click', () => {
+        popup.classList.remove('popup_is-opened');
+        popup.classList.add('popup_is-animated');
   })
   // через esc
   window.addEventListener('keydown', (e) => {
@@ -30,5 +30,5 @@ export function closeModal () {
     }
   });
   // через оверлей
-  
+
 }

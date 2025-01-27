@@ -13,14 +13,18 @@ export const createCard = (card, deleteButtonFunction, handleLikeCard, handleIma
 
     const deleteButton = cloneCard.querySelector('.card__delete-button');
     deleteButton.addEventListener ('click', () => {
-      deleteButtonFunction(cloneCard);
+        deleteButtonFunction(cloneCard);
+    }); 
+
+    buttonLike.addEventListener ('click', () => {
+        handleLikeCard(cloneCard);
     }); 
 
   return cloneCard; 
 };
 
 // @todo: Поставить лaйк
-export function handleLikeCard(card) {
+export function handleLikeCard() {
     const buttonLike = document.querySelector('.card__like-button');
     if (buttonLike.classList.contains('card__like-button_is-active')) {
         buttonLike.classList.remove('card__like-button_is-active');
