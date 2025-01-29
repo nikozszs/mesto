@@ -12,21 +12,15 @@ initialCards.forEach(function (card) {
   placesList.append(cloneCard);
 });
 
-// Находим форму в DOM
-const formElement = // Воспользуйтесь методом querySelector()
-// Находим поля формы в DOM
-const nameInput = // Воспользуйтесь инструментом .querySelector()
-const jobInput = // Воспользуйтесь инструментом .querySelector()
 
-// Обработчик «отправки» формы, хотя пока
-// она никуда отправляться не будет
+const formElement = document.querySelector('.popup__form');
+const nameInput = document.querySelector('.popup__input_type_name');
+const jobInput = document.querySelector('.popup__input_type_description');
+
 function handleFormSubmit(evt) {
-    evt.preventDefault(); // Эта строчка отменяет стандартную отправку формы.
-    // Так мы можем определить свою логику отправки.
-    // О том, как это делать, расскажем позже.
-
-    // Получите значение полей jobInput и nameInput из свойства value
-
+    evt.preventDefault();
+    const nameInput = nameInput.value;
+    const jobInput = jobInput.value;
     // Выберите элементы, куда должны быть вставлены значения полей
 
     // Вставьте новые значения с помощью textContent

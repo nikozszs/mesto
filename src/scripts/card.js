@@ -23,9 +23,9 @@ export const createCard = (card, deleteButtonFunction, handleLikeCard, handleIma
   return cloneCard; 
 };
 
+const buttonLike = document.querySelector('.card__like-button');
 // @todo: Поставить лaйк
 export function handleLikeCard() {
-    const buttonLike = document.querySelector('.card__like-button');
     if (buttonLike.classList.contains('card__like-button_is-active')) {
         buttonLike.classList.remove('card__like-button_is-active');
     } else {
