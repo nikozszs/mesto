@@ -1,10 +1,11 @@
 import { initialCards } from './scripts/cards.js';
 import '../src/pages/index.css';
-import { createCard, handleLikeCard, handleCardDelete, handleImageClick} from './scripts/card.js';
-import { openModal, closeModal} from './scripts/modal.js';
+import { createCard, handleLikeCard, handleCardDelete } from './scripts/card.js';
+import { openPopup, closePopup, overlayListener} from './scripts/modal.js';
 
 // @todo: DOM узлы
 const placesList = document.querySelector('.places__list');
+const popup = document.querySelector('.popup');
 
 // @todo: Вывести карточки на страницу
 initialCards.forEach(function (card) {
@@ -28,3 +29,16 @@ function handleFormSubmit(evt) {
 // Прикрепляем обработчик к форме:
 // он будет следить за событием “submit” - «отправка»
 formElement.addEventListener('submit', handleFormSubmit);
+
+// @todo: обработка клика по изображению
+function handleImageClick(cardImage, cardTitle) {
+  const popupImage = document.querySelector('.popup_type_image');
+  const imageContainer = document.querySelector('.popup__content_content_image')
+  popupImage.src = cardImage.src;
+  popupImage.alt = cardImage.alt;
+  popupCaption.textContent = cardTitle.textContent;
+  openPopup(imageContainer);
+}
+
+overlayListener(popup);
+export default popup;

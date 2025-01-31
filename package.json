@@ -7,7 +7,7 @@
     "build": "webpack --mode production",
     "dev": "webpack serve"
   },
-  "author": "Stas Basov",
+  "author": "Nikozszs",
   "license": "ISC",
   "keywords": [],
   "devDependencies": {

@@ -1,5 +1,6 @@
 // @todo: Функция создания карточки
 const cardTemplate = document.querySelector('#card-template').content;
+
 export const createCard = (card, deleteButtonFunction, handleLikeCard, handleImageClick) => {
     const cloneCard = cardTemplate.querySelector('.card').cloneNode(true);
     const cardImage = cloneCard.querySelector('.card__image');
@@ -15,7 +16,8 @@ export const createCard = (card, deleteButtonFunction, handleLikeCard, handleIma
     deleteButton.addEventListener ('click', () => {
         deleteButtonFunction(cloneCard);
     }); 
-
+    
+    const buttonLike = cloneCard.querySelector('.card__like-button');
     buttonLike.addEventListener ('click', () => {
         handleLikeCard(cloneCard);
     }); 
@@ -23,24 +25,10 @@ export const createCard = (card, deleteButtonFunction, handleLikeCard, handleIma
   return cloneCard; 
 };
 
-const buttonLike = document.querySelector('.card__like-button');
 // @todo: Поставить лaйк
-export function handleLikeCard() {
-    if (buttonLike.classList.contains('card__like-button_is-active')) {
-        buttonLike.classList.remove('card__like-button_is-active');
-    } else {
-        buttonLike.classList.add('card__like-button_is-active');
-    }
-}
-
-// @todo: обработка клика по изображению
-export function handleImageClick(cardImage, cardTitle) {
-    const popupImage = document.querySelector('.popup_type_image');
-    const imageContainer = document.querySelector('.popup__content_content_image')
-    popupImage.src = cardImage.src;
-    popupImage.alt = cardImage.alt;
-    popupCaption.textContent = cardTitle.textContent;
-    openModal(imageContainer);
+export function handleLikeCard(event) {
+    const like = event.target;
+    like.classList.toggle('card__like-button_is-active');
 }
 
 // @todo: Удалить карточку
