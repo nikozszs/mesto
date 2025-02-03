@@ -1,38 +1,53 @@
 import { initialCards } from './scripts/cards.js';
 import '../src/pages/index.css';
 import { createCard, handleLikeCard, handleCardDelete } from './scripts/card.js';
-import { openPopup, closePopup, overlayListener} from './scripts/modal.js';
+import { openPopup, closePopup, overlayListener } from './scripts/modal.js';
 
 // @todo: DOM узлы
 const placesList = document.querySelector('.places__list');
 const popup = document.querySelector('.popup');
+const buttonProfileEdit = document.querySelector('.popup_type_edit');
+const buttonNewCard = document.querySelector('.popup_type_new-card');
 
 // @todo: Вывести карточки на страницу
 initialCards.forEach(function (card) {
-  const cloneCard = createCard(card, handleCardDelete);
+  const cloneCard = createCard(card, handleCardDelete, handleLikeCard, handleImageClick);
   placesList.append(cloneCard);
 });
 
+// @todo: Редактирование имени и информации о себе
+const formEdit = document.forms['edit-profile'];
 
-const formElement = document.querySelector('.popup__form');
-const nameInput = document.querySelector('.popup__input_type_name');
-const jobInput = document.querySelector('.popup__input_type_description');
-
-function handleFormSubmit(evt) {
-    evt.preventDefault();
-    const nameInput = nameInput.value;
-    const jobInput = jobInput.value;
-    // Выберите элементы, куда должны быть вставлены значения полей
-
-    // Вставьте новые значения с помощью textContent
+function FormEditProfile(evt) {
+  evt.preventDefault();
+  const nameInput = document.querySelector('.popup__input_type_name').value;
+  const jobInput = document.querySelector('.popup__input_type_description').value;
+  const profileName= document.getElementById("name");
+  const profileJob = document.getElementById("description");
+  profileName.textContent = nameInput;
+  profileJob.textContent = jobInput;
+  closePopup(buttonProfileEdit);
 }
-// Прикрепляем обработчик к форме:
-// он будет следить за событием “submit” - «отправка»
-formElement.addEventListener('submit', handleFormSubmit);
+formEdit.addEventListener('submit', FormEditProfile);
+
+// @todo: Редактирование имени и информации о себе
+const formAdd = document.forms['new-place'];
+
+function FormNewCard(evt) {
+  evt.preventDefault();
+  const placeNameInput = document.querySelector('.popup__input_type_card-name').value;
+  const linkInput = document.querySelector('.popup__input_type_url').value;
+  const placeName= document.getElementById("place-name");
+  const placeLink = document.getElementById("link");
+  placeName.textContent = placeNameInput;
+  placeLink.textContent = linkInput;
+  closePopup(buttonNewCard);
+}
+formAdd.addEventListener('submit', FormNewCard);
 
 // @todo: обработка клика по изображению
 function handleImageClick(cardImage, cardTitle) {
-  const popupImage = document.querySelector('.popup_type_image');
+  const popupImage = document.querySelector('.popup__image');
   const imageContainer = document.querySelector('.popup__content_content_image')
   popupImage.src = cardImage.src;
   popupImage.alt = cardImage.alt;
@@ -42,3 +57,4 @@ function handleImageClick(cardImage, cardTitle) {
 
 overlayListener(popup);
 export default popup;
+

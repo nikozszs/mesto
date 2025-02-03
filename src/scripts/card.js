@@ -20,22 +20,18 @@ export const createCard = (card, deleteButtonFunction, handleLikeCard, handleIma
     const buttonLike = cloneCard.querySelector('.card__like-button');
     buttonLike.addEventListener ('click', () => {
         handleLikeCard(cloneCard);
-    }); 
+    });
 
   return cloneCard; 
-};
+}
 
 // @todo: Поставить лaйк
 export function handleLikeCard(event) {
-    const like = event.target;
-    like.classList.toggle('card__like-button_is-active');
+    event.target.classList.toggle('card__like-button_is-active');
 }
 
 // @todo: Удалить карточку
 export function handleCardDelete(cloneCard) {
-    //показать модал окно
-    //делаем запрос на бэкенд
     cloneCard.remove();
-    //что то запустить
 }
   

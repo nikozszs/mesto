@@ -1,6 +1,3 @@
-const buttonProfileEdit = document.querySelector('.popup_type_edit');
-const buttonProfileAdd = document.querySelector('.popup_type_new-card');
-
 // @todo: открыть попап
 export const openPopup = popup => {
     popup.classList.add('popup_is-opened'); 
@@ -17,7 +14,7 @@ export const closePopup = popup => {
   // через esc
 const closePopupByEsc = evt => {
   if (evt.key === 'Escape') { 
-    closePopup(document.querySelector('.popup'))
+    closePopup(document.querySelector('.popup'));
   }
 }
   // через оверлей
