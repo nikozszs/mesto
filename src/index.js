@@ -6,17 +6,16 @@ import { openPopup, closePopup, overlayListener } from './scripts/modal.js';
 // @todo: DOM узлы
 const placesList = document.querySelector('.places__list');
 const popup = document.querySelector('.popup');
-const buttonProfileEdit = document.querySelector('.popup_type_edit');
-const buttonNewCard = document.querySelector('.popup_type_new-card');
 
 // @todo: Вывести карточки на страницу
 initialCards.forEach(function (card) {
-  const cloneCard = createCard(card, handleCardDelete, handleLikeCard, handleImageClick);
+  const cloneCard = createCard(card, handleCardDelete, handleLikeCard);
   placesList.append(cloneCard);
 });
 
 // @todo: Редактирование имени и информации о себе
 const formEdit = document.forms['edit-profile'];
+const buttonProfileEdit = document.querySelector('.popup_type_edit');
 
 function FormEditProfile(evt) {
   evt.preventDefault();
@@ -32,6 +31,7 @@ formEdit.addEventListener('submit', FormEditProfile);
 
 // @todo: Редактирование имени и информации о себе
 const formAdd = document.forms['new-place'];
+const buttonNewCard = document.querySelector('.popup_type_new-card');
 
 function FormNewCard(evt) {
   evt.preventDefault();
