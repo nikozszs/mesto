@@ -5,7 +5,7 @@ import { openPopup, closePopup, overlayListener } from './scripts/modal.js';
 
 // @todo: DOM узлы
 const placesList = document.querySelector('.places__list');
-const popup = document.querySelector('.popup');
+const popup = document.querySelectorAll('.popup');
 
 // @todo: Вывести карточки на страницу
 initialCards.forEach(function (card) {
@@ -29,18 +29,26 @@ function FormEditProfile(evt) {
 }
 formEdit.addEventListener('submit', FormEditProfile);
 
-// @todo: Редактирование имени и информации о себе
+// @todo: Форма добавления карточки
 const formAdd = document.forms['new-place'];
 const buttonNewCard = document.querySelector('.popup_type_new-card');
 
 function FormNewCard(evt) {
   evt.preventDefault();
-  const placeNameInput = document.querySelector('.popup__input_type_card-name').value;
-  const linkInput = document.querySelector('.popup__input_type_url').value;
+
+  const newCardName = document.querySelector('.popup__input_type_card-name').value;
+  const newCardLink = document.querySelector('.popup__input_type_url').value;
   const placeName= document.getElementById("place-name");
   const placeLink = document.getElementById("link");
-  placeName.textContent = placeNameInput;
-  placeLink.textContent = linkInput;
+
+  const newCard = {
+    name: newCardName.value,
+    link: newCardLink.value
+  };
+  initialCards.unshift(newCard);
+
+  placeName.textContent = newCardName;
+  placeLink.textContent = newCardLink;
   closePopup(buttonNewCard);
 }
 formAdd.addEventListener('submit', FormNewCard);

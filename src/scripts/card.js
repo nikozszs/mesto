@@ -4,9 +4,7 @@ const cardTemplate = document.querySelector('#card-template').content;
 export const createCard = (card, deleteButtonFunction, handleLikeCard, handleImageClick) => {
     const cloneCard = cardTemplate.querySelector('.card').cloneNode(true);
     const cardImage = cloneCard.querySelector('.card__image');
-    cardImage.addEventListener('click', () => {
-        handleImageClick(cardImage, cardTitle);
-    });
+  
     cardImage.setAttribute('alt', card.description);
     const cardTitle = cloneCard.querySelector('.card__title');
     cardTitle.textContent = card.name;
@@ -26,8 +24,10 @@ export const createCard = (card, deleteButtonFunction, handleLikeCard, handleIma
 }
 
 // @todo: Поставить лaйк
-export function handleLikeCard(event) {
-    event.target.classList.toggle('card__like-button_is-active');
+export function handleLikeCard(evt) {
+    if (evt.target.classList.contains('card__like-button')) {
+        evt.target.classList.toggle('card__like-button_is-active');
+    }
 }
 
 // @todo: Удалить карточку
