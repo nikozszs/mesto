@@ -14,12 +14,14 @@ export const closePopup = popup => {
   // через esc
 const closePopupByEsc = evt => {
   if (evt.key === 'Escape') { 
-    closePopup(popup);
+    closePopup(document.querySelector('popup_is-opened'));
   }
-}
+};
   // через оверлей
 export function overlayListener(overlay) {
-  overlay.addEventListener('click', () => {
-    closePopup(popup);
+  overlay.addOverlayListener('click', (evt) => {
+    if (evt.target.classList.contains('popup_is-opened')) {
+      closePopup(document.querySelector('popup_is-opened'));
+    }
   });
-  }
+}

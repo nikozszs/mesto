@@ -5,19 +5,19 @@ import { openPopup, closePopup, overlayListener } from './scripts/modal.js';
 
 // @todo: DOM узлы
 const placesList = document.querySelector('.places__list');
-const popup = document.querySelectorAll('.popup');
+const popups = document.querySelectorAll('.popup');
 
 // @todo: Вывести карточки на страницу
 initialCards.forEach(function (card) {
-  const cloneCard = createCard(card, handleCardDelete, handleLikeCard);
+  const cloneCard = createCard(card, handleCardDelete, handleLikeCard, handleImageClick);
   placesList.append(cloneCard);
 });
 
 // @todo: Редактирование имени и информации о себе
 const formEdit = document.forms['edit-profile'];
-const buttonProfileEdit = document.querySelector('.popup_type_edit');
+const popupProfileEdit = document.querySelector('.popup_type_edit');
 
-function FormEditProfile(evt) {
+function submitFormEditProfile(evt) {
   evt.preventDefault();
   const nameInput = document.querySelector('.popup__input_type_name').value;
   const jobInput = document.querySelector('.popup__input_type_description').value;
@@ -25,15 +25,15 @@ function FormEditProfile(evt) {
   const profileJob = document.getElementById("description");
   profileName.textContent = nameInput;
   profileJob.textContent = jobInput;
-  closePopup(buttonProfileEdit);
+  closePopup(popupProfileEdit);
 }
-formEdit.addEventListener('submit', FormEditProfile);
+formEdit.addEventListener('submit', submitFormEditProfile);
 
 // @todo: Форма добавления карточки
 const formAdd = document.forms['new-place'];
 const buttonNewCard = document.querySelector('.popup_type_new-card');
 
-function FormNewCard(evt) {
+function submitFormNewCard(evt) {
   evt.preventDefault();
 
   const newCardName = document.querySelector('.popup__input_type_card-name').value;
@@ -51,18 +51,20 @@ function FormNewCard(evt) {
   placeLink.textContent = newCardLink;
   closePopup(buttonNewCard);
 }
-formAdd.addEventListener('submit', FormNewCard);
+formAdd.addEventListener('submit', submitFormNewCard);
 
 // @todo: обработка клика по изображению
 function handleImageClick(cardImage, cardTitle) {
   const popupImage = document.querySelector('.popup__image');
-  const imageContainer = document.querySelector('.popup__content_content_image')
+  const imageContainer = document.querySelector('.popup__content_content_image');
+  const popupCaption = document.querySelector('.popup__caption');
   popupImage.src = cardImage.src;
   popupImage.alt = cardImage.alt;
   popupCaption.textContent = cardTitle.textContent;
   openPopup(imageContainer);
 }
 
-overlayListener(popup);
-export default popup;
+popups.forEach(function (popup) {
+  overlayListener(popup);
+});
 

@@ -16,9 +16,7 @@ export const createCard = (card, deleteButtonFunction, handleLikeCard, handleIma
     }); 
     
     const buttonLike = cloneCard.querySelector('.card__like-button');
-    buttonLike.addEventListener ('click', () => {
-        handleLikeCard(cloneCard);
-    });
+    buttonLike.addEventListener ('click', handleLikeCard);
 
   return cloneCard; 
 }
