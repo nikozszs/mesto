@@ -1,7 +1,7 @@
 import { initialCards } from './scripts/cards.js';
 import '../src/pages/index.css';
 import { createCard, handleLikeCard, handleCardDelete } from './scripts/card.js';
-import { openPopup, closePopup, overlayListener } from './scripts/modal.js';
+import { openPopup, closePopup, addOverlayListener } from './scripts/modal.js';
 
 // @todo: DOM узлы
 const placesList = document.querySelector('.places__list');
@@ -65,6 +65,6 @@ function handleImageClick(cardImage, cardTitle) {
 }
 
 popups.forEach(function (popup) {
-  overlayListener(popup);
+  addOverlayListener(popup);
 });
 
