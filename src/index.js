@@ -36,24 +36,17 @@ const formAdd = document.forms['new-place'];
 function submitFormNewCard(evt) {
   evt.preventDefault();
 
-  const buttonNewCard = document.querySelector('.popup_type_new-card');
-  const newCardName= document.getElementById("place-name").value;
-  const newCardLink = document.getElementById("link").value;
+  const popupNewCard = document.querySelector('.popup_type_new-card');
+  const newCardName= document.getElementById("place-name");
+  const newCardLink = document.getElementById("link");
 
   const newCards = {
     name: newCardName.value,
     link: newCardLink.value
   };
 
-  document.querySelector('.places__list').appendChild(createNewCard(initialCards[0]));
-  openPopup(buttonNewCard);
-}
-
-function createNewCard (data) {
-  const newCard = document.createElement('div');
-  newCard.classList.add('card');
-  newCard.textContent = data.name;
-  return newCard;
+  document.querySelector('.places__list').appendChild(createCard(newCards));
+  openPopup(popupNewCard);
 }
 
 formAdd.addEventListener('submit', submitFormNewCard);
