@@ -15,40 +15,46 @@ initialCards.forEach(function (card) {
 
 // @todo: Редактирование имени и информации о себе
 const formEdit = document.forms['edit-profile'];
+const popupProfileEdit = document.querySelector('.popup_type_edit');
+const profileEditButton = document.querySelector('.profile__edit-button');
+profileEditButton.addEventListener('click', () => {
+  openPopup(popupProfileEdit);
+});
 
-function submitFormEditProfile(evt) {
+function submitFormEditProfile(evt, data) {
   evt.preventDefault();
 
-  const popupProfileEdit = document.querySelector('.popup_type_edit');
-  const nameInput = document.querySelector('.popup__input_type_name').value;
-  const jobInput = document.querySelector('.popup__input_type_description').value;
-  const profileName= document.getElementById("name");
-  const profileJob = document.getElementById("description");
-  profileName.textContent = nameInput;
-  profileJob.textContent = jobInput;
-  openPopup(popupProfileEdit);
+  const profileName = document.forms.formEdit.name;
+  const profileJob = document.forms.formEdit.description;
+  profileName.textContent = data.name;
+  profileJob.textContent = data.job;
+  closePopup(popupProfileEdit);
 }
 formEdit.addEventListener('submit', submitFormEditProfile);
 
+
 // @todo: Форма добавления карточки
 const formAdd = document.forms['new-place'];
+const popupNewCard = document.querySelector('.popup_type_new-card');
+const profileAddButton = document.querySelector('.profile__add-button');
+profileAddButton.addEventListener('click', () => {
+  openPopup(popupNewCard);
+});
 
 function submitFormNewCard(evt) {
   evt.preventDefault();
 
-  const popupNewCard = document.querySelector('.popup_type_new-card');
   const newCardName= document.getElementById("place-name");
   const newCardLink = document.getElementById("link");
 
   const newCards = {
-    name: newCardName.value,
-    link: newCardLink.value
+    name: newCardName,
+    link: newCardLink
   };
 
-  document.querySelector('.places__list').appendChild(createCard(newCards));
-  openPopup(popupNewCard);
+  document.querySelector('.places__list').appendChild(createCard(newCards, handleCardDelete, handleLikeCard, handleImageClick));
+  closePopup(popupNewCard);
 }
-
 formAdd.addEventListener('submit', submitFormNewCard);
 
 // @todo: обработка клика по изображению
