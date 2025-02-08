@@ -6,7 +6,7 @@ import { openPopup, closePopup, addOverlayListener } from './scripts/modal.js';
 // @todo: DOM узлы
 const placesList = document.querySelector('.places__list');
 const popups = document.querySelectorAll('.popup');
-const popupCloseButton = document.querySelectorAll('.popup__close');
+const popupCloseButtons = document.querySelectorAll('.popup__close');
 
 // @todo: Вывести карточки на страницу
 initialCards.forEach(function (card) {
@@ -23,16 +23,20 @@ profileEditButton.addEventListener('click', () => {
 });
 
 formEdit.addEventListener('submit', (evt) => {
-  document.forms.formEdit.name.value.textContent = nameInput;
-  document.forms.formEdit.description.value.textContent = jobInput;
   evt.preventDefault();
-  form.reset();
+  const nameInput = document.getElementById('name');
+  const jobInput = document.getElementById('description');
+  nameInput.value = '';
+  jobInput.value = '';
+  formEdit.reset();
   closePopup(popupProfileEdit);
 });
 
-popupCloseButton.addEventListener('click', () => {
-  closePopup(popupProfileEdit);
-});
+// @todo: Кнопка закрытия
+popupCloseButtons.forEach(button => {
+  const popup = button.closest('.popup');
+  button.addEventListener('click', () => closePopup(popup));
+})
 
 // @todo: Форма добавления карточки
 const formAdd = document.forms['new-place'];
@@ -43,8 +47,8 @@ profileAddButton.addEventListener('click', () => {
 });
 
 function submitFormNewCard() {
-  const newCardName= document.getElementById("place-name");
-  const newCardLink = document.getElementById("link");
+  const newCardName= document.getElementById("place-name").value;
+  const newCardLink = document.getElementById("link").value;
   const newCards = {
     name: newCardName,
     link: newCardLink
@@ -54,13 +58,9 @@ function submitFormNewCard() {
 
 formAdd.addEventListener('submit', (evt) => {
   evt.preventDefault();
-  submitFormNewCard(newCards);
-  form.reset();
+  submitFormNewCard();
+  formAdd.reset();
   closePopup(popupNewCard);
-});
-
-popupCloseButton.addEventListener('click', () => {
-  closePopup(profileAddButton);
 });
 
 // @todo: обработка клика по изображению
@@ -74,9 +74,6 @@ function handleImageClick(cardImage, cardTitle) {
   openPopup(popupTypeImage);
 }
 
-popupCloseButton.addEventListener('click', () => {
-  closePopup(popupTypeImage);
-});
 
 popups.forEach (function (popup) {
   addOverlayListener(popup);

@@ -15,7 +15,7 @@ export const closePopup = popup => {
   // через esc
 const closePopupByEsc = evt => {
   if (evt.key === 'Escape') { 
-    closePopup(document.querySelector('.popup__close'));
+    closePopup(document.querySelector('.popup_is-opened'));
   }
 };
 
@@ -23,7 +23,7 @@ const closePopupByEsc = evt => {
 export function addOverlayListener(overlay) {
   overlay.addEventListener('click', (evt) => {
     if (evt.target.classList.contains('.popup_is-opened')) {
-      closePopup(document.querySelector('.popup__close'));
+      closePopup(evt.target);
     }
   });
 }
