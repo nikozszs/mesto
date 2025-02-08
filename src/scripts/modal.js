@@ -12,14 +12,14 @@ export const closePopup = popup => {
   popup.removeEventListener('keydown', closePopupByEsc);
 };
 
-  // через esc
+// через esc
 const closePopupByEsc = evt => {
   if (evt.key === 'Escape') { 
     closePopup(document.querySelector('popup_is-opened'));
   }
 };
 
-  // через оверлей
+// через оверлей
 export function addOverlayListener(overlay) {
   overlay.addEventListener('click', (evt) => {
     if (evt.target.classList.contains('popup_is-opened')) {
