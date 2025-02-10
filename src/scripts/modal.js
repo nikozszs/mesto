@@ -15,7 +15,7 @@ export const closePopup = popup => {
 // через esc
 const closePopupByEsc = evt => {
   if (evt.key === 'Escape') { 
-    closePopup(document.querySelector('popup_is-opened'));
+    closePopup(document.querySelector('.popup_is-opened'));
   }
 };
 
