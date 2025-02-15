@@ -22,6 +22,7 @@ const nameInput = popupProfileEdit.querySelector('.popup__input_type_name');
 const jobInput = popupProfileEdit.querySelector('.popup__input_type_description');
 const profileName = document.querySelector('.profile__title');
 const profileDescription = document.querySelector('.profile__description');
+const EditRegExp = /[а-яАёa-z\-]+$/gi;
 
 profileEditButton.addEventListener('click', () => {
   nameInput.value = profileName.textContent; 
@@ -35,6 +36,7 @@ formEdit.addEventListener('submit', (evt) => {
   const jobValue = jobInput.value; 
   profileName.textContent = nameValue;
   profileDescription.textContent = jobValue;
+
   formEdit.reset();
   closePopup(popupProfileEdit);
 });
