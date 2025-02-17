@@ -1,0 +1,7 @@
+.popup__input_type_error {
+
+}
+
+.popup__error_visible {
+  border-bottom: 1px solid red;
+}

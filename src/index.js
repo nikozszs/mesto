@@ -2,6 +2,7 @@ import { initialCards } from './scripts/cards.js';
 import '../src/pages/index.css';
 import { createCard, handleLikeCard, handleCardDelete } from './scripts/card.js';
 import { openPopup, closePopup, addOverlayListener } from './scripts/modal.js';
+import { hasInvalidInput, enableValidation, checkInputValidity } from './scripts/validation.js';
 
 // @todo: DOM узлы
 const placesList = document.querySelector('.places__list');
@@ -26,6 +27,7 @@ const profileDescription = document.querySelector('.profile__description');
 profileEditButton.addEventListener('click', () => {
   nameInput.value = profileName.textContent; 
   jobInput.value= profileDescription.textContent;
+  clearValidation(formEdit, checkInputValidity);
   openPopup(popupProfileEdit);
 });
 
@@ -53,6 +55,7 @@ const newCardNameInput = popupNewCard.querySelector(".popup__input_type_card-nam
 const newCardLinkInput = popupNewCard.querySelector(".popup__input_type_url");
 
 profileAddButton.addEventListener('click', () => {
+  clearValidation(formEdit, checkInputValidity);
   openPopup(popupNewCard);
 });
 
@@ -86,41 +89,9 @@ popups.forEach (function (popup) {
   addOverlayListener(popup);
 });
 
-// @todo: Валидация формы
-const showInputError = (formElement, inputElement, errorMessage) => {
-  inputElement.classList.add('popup__input_type_error');
-  const errorElement = formElement.querySelector(`.${inputElement.id}-error`);
-  errorElement.textContent = errorMessage;
-  errorElement.classList.add('popup__input_type_error_active');
-};
+// @todo: Валидация инпута
 
-const hideInputError = (formElement, inputElement) => {
-  inputElement.classList.remove('popup__input_type_error');
-  const errorElement = formElement.querySelector(`.${inputElement.id}-error`);
-  errorElement.classList.remove('popup__input_type_error_active');
-  errorElement.textContent = '';
-};
-
-const checkInputValidity = (formElement, inputElement) => {
-  if (inputElement.validity.patternMismatch) {
-    inputElement.setCustomValidity("Разрешены только латинские и кириллические буквы, знаки дефиса и пробелы.");
-  } else {
-  inputElement.setCustomValidity("");
-  }
-  if (!inputElement.validity.valid) {
-    showInputError(formElement, inputElement, popupInput.validationMessage);
-  } else {
-    hideInputError(formElement, inputElement);
-  }
-};
-
-const hasInvalidInput = (inputList) => {
-  return inputList.some((inputElement) => {
-    return !inputElement.validity.valid;
-  })
-};
-
-const toggleButtonState = (inputList, buttonElement) => {
+const clearValidation = (inputList, buttonElement) => {
   if (hasInvalidInput(inputList)) {
     buttonElement.disabled = true;
     buttonElement.classList.add('popup__button');
@@ -128,31 +99,6 @@ const toggleButtonState = (inputList, buttonElement) => {
     buttonElement.disabled = false;
     buttonElement.classList.remove('popup__button');
   }
-};
-
-const setEventListeners = (formElement) => {
-  const inputList = Array.from(formElement.querySelectorAll('.popup__input'));
-  const buttonElement = formElement.querySelector('.popup__button');
-  toggleButtonState(inputList, buttonElement);
-  inputList.forEach((inputElement) => {
-    inputElement.addEventListener('input', () => {
-      checkInputValidity(formElement, inputElement);
-      toggleButtonState(inputList, buttonElement);
-    });
-  });
-}; 
-
-const enableValidation = () => {
-  const formList = Array.from(document.querySelectorAll('.popup__form'));
-  formList.forEach((formElement) => {
-    formElement.addEventListener('submit', (evt) => {
-    evt.preventDefault();
-  });
-  const fieldsetList = Array.from(formElement.querySelectorAll('.popup__form'));
-    fieldsetList.forEach((fieldSet) => {
-      setEventListeners(fieldSet);
-    });
-  });
 };
 
 enableValidation();
