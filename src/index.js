@@ -3,6 +3,7 @@ import '../src/pages/index.css';
 import { createCard, handleLikeCard, handleCardDelete } from './scripts/card.js';
 import { openPopup, closePopup, addOverlayListener } from './scripts/modal.js';
 import { enableValidation, clearValidation, setEventListeners } from './scripts/validation.js';
+import { getUserInfo, patchUserInfo, getInitialCards, createNewCard, cardsAPI } from './scripts/api.js';
 
 // @todo: DOM узлы
 const placesList = document.querySelector('.places__list');
@@ -27,7 +28,7 @@ const profileDescription = document.querySelector('.profile__description');
 profileEditButton.addEventListener('click', () => {
   nameInput.value = profileName.textContent; 
   jobInput.value= profileDescription.textContent;
-  clearValidation(formEdit, setEventListeners);
+  clearValidation(formEdit, validationConfig);
   openPopup(popupProfileEdit);
 });
 
@@ -55,7 +56,7 @@ const newCardNameInput = popupNewCard.querySelector(".popup__input_type_card-nam
 const newCardLinkInput = popupNewCard.querySelector(".popup__input_type_url");
 
 profileAddButton.addEventListener('click', () => {
-  clearValidation(formEdit, setEventListeners);
+  clearValidation(formAdd, validationConfig);
   openPopup(popupNewCard);
 });
 
@@ -90,11 +91,54 @@ popups.forEach (function (popup) {
 });
 
 // @todo: Валидация инпута
-
-enableValidation({
+enableValidation();
+validationConfig({
   formList: '.popup__form',
   inputList: '.popup__input',
   buttonElement: '.popup__button',
   errorElement: 'popup__input_type_error',
   errorClass: 'popup__error_visible'
-}); 
+});
+
+// @todo: Запросы карточек API 
+getInitialCards().then((data) => {
+  data.forEach(function (card) {
+    createCard(card, handleCardDelete, handleLikeCard, handleImageClick);
+    placesList.append(card);
+  })
+})
+
+const newCardsData = {
+  title: "полить цветы",
+  completed: false,
+};
+
+createNewCard(newCardsData).then((data) => {
+  console.log(data);
+})
+//чтобы созд карточку, нужно будет получ сам список карточек и инфу о себе как пользователя. 
+//удалять можно ток свои карточки. у карточки будет айдишник владельца карточкию
+//нужно при созд каротчки сверять это ваша каротчка или нет. если ваша - оставлять корзинку, если нет - удаляем корзинку на карточке.
+//для этого нужно долждиться и инфу о пользорвателе и о карточке и будем одновременно работать
+
+// @todo: добавить API чтения
+cardsAPI.getList().then((allCards) => {
+  allCards.forEach(elem => {
+    const newCardAPI = card.createItem(
+      elem.id, 
+      elem.title, 
+      elem.completed)
+  });
+  newCardAPI.append(newCardAPI);
+})
+
+cardsAPI.createItem({
+  title: value,
+  completed: false,
+}).then((newCardAPI) => {
+  newCardAPI.createItem({
+    id: newCardAPI.id,
+    value: newCardAPI.title,
+    input
+  });
+})
