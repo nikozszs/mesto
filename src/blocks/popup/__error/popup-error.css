@@ -1,7 +1,8 @@
 .popup__input_type_error {
-
+  color: #C4C4C4;
 }
 
 .popup__error_visible:invalid {
   border-bottom: 1px solid red;
+  color: red;
 }

@@ -2,7 +2,7 @@ import { initialCards } from './scripts/cards.js';
 import '../src/pages/index.css';
 import { createCard, handleLikeCard, handleCardDelete } from './scripts/card.js';
 import { openPopup, closePopup, addOverlayListener } from './scripts/modal.js';
-import { enableValidation, clearValidation, setEventListeners } from './scripts/validation.js';
+import { validationConfig, clearValidation } from './scripts/validation.js';
 import { getUserInfo, patchUserInfo, getInitialCards, createNewCard, cardsAPI } from './scripts/api.js';
 
 // @todo: DOM узлы
@@ -91,11 +91,11 @@ popups.forEach (function (popup) {
 });
 
 // @todo: Валидация инпута
-enableValidation();
 validationConfig({
   formList: '.popup__form',
   inputList: '.popup__input',
   buttonElement: '.popup__button',
+  buttonElementdisabled: 'popup__button_disabled',
   errorElement: 'popup__input_type_error',
   errorClass: 'popup__error_visible'
 });

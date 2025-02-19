@@ -26,7 +26,7 @@
   }
 }
 
-.popup__button:disabled {
+.popup__button_disabled:disabled {
   opacity: 0.2;
   color: #C4C4C4;
   border: #C4C4C4;
