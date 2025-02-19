@@ -2,7 +2,7 @@ import { initialCards } from './scripts/cards.js';
 import '../src/pages/index.css';
 import { createCard, handleLikeCard, handleCardDelete } from './scripts/card.js';
 import { openPopup, closePopup, addOverlayListener } from './scripts/modal.js';
-import { hasInvalidInput, enableValidation, checkInputValidity } from './scripts/validation.js';
+import { enableValidation, clearValidation, setEventListeners } from './scripts/validation.js';
 
 // @todo: DOM узлы
 const placesList = document.querySelector('.places__list');
@@ -27,7 +27,7 @@ const profileDescription = document.querySelector('.profile__description');
 profileEditButton.addEventListener('click', () => {
   nameInput.value = profileName.textContent; 
   jobInput.value= profileDescription.textContent;
-  clearValidation(formEdit, checkInputValidity);
+  clearValidation(formEdit, setEventListeners);
   openPopup(popupProfileEdit);
 });
 
@@ -55,7 +55,7 @@ const newCardNameInput = popupNewCard.querySelector(".popup__input_type_card-nam
 const newCardLinkInput = popupNewCard.querySelector(".popup__input_type_url");
 
 profileAddButton.addEventListener('click', () => {
-  clearValidation(formEdit, checkInputValidity);
+  clearValidation(formEdit, setEventListeners);
   openPopup(popupNewCard);
 });
 
@@ -91,14 +91,10 @@ popups.forEach (function (popup) {
 
 // @todo: Валидация инпута
 
-const clearValidation = (inputList, buttonElement) => {
-  if (hasInvalidInput(inputList)) {
-    buttonElement.disabled = true;
-    buttonElement.classList.add('popup__button');
-  } else {
-    buttonElement.disabled = false;
-    buttonElement.classList.remove('popup__button');
-  }
-};
-
-enableValidation();
+enableValidation({
+  formList: '.popup__form',
+  inputList: '.popup__input',
+  buttonElement: '.popup__button',
+  errorElement: 'popup__input_type_error',
+  errorClass: 'popup__error_visible'
+}); 

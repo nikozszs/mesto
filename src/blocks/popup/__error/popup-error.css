@@ -2,6 +2,6 @@
 
 }
 
-.popup__error_visible {
+.popup__error_visible:invalid {
   border-bottom: 1px solid red;
 }
