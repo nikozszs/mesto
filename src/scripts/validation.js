@@ -48,7 +48,7 @@ export const setEventListeners = (formElement) => {
   });
 };
 
-export const validationConfig = () => {
+export const enableValidation = (validationConfig) => {
     const formList = Array.from(document.querySelectorAll('.popup__form'));
     formList.forEach((formElement) => {
       formElement.addEventListener('submit', (evt) => {
@@ -56,7 +56,7 @@ export const validationConfig = () => {
     });
     const fieldsetList = Array.from(formElement.querySelectorAll('.popup__form'));
       fieldsetList.forEach((fieldSet) => {
-        setEventListeners(fieldSet);
+        setEventListeners(fieldSet, validationConfig);
       });
     });
 };
