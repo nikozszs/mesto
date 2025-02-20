@@ -32,6 +32,29 @@ export function handleLikeCard(evt) {
     }
 }
 
+// @todo: Подсчет лайков
+export function handleLikesCount(likeCount, buttonLike, cards) {
+    if (buttonLike.classList.contains('card__like-button_is-active')) {
+        deleteButtonFunction(cards._id)
+        .then((res) => {
+            buttonLike.classList.toggle('card__like-button_is-active');
+            const likeCount = document.querySelector('.card__like-counter');
+            likeCount.textContent = res.likes.length;
+        })
+        .catch((err) => {
+            console.log('Ошибка. Запрос не выполнен: ', err);
+        });
+    } else {
+        handleLikeCard(cards._id)
+        .then((res) => {
+            buttonLike.classList.toggle('card__like-button_is-active');
+            likeCount.textContent = res.likes.length
+        })
+        .catch((err) => 
+            console.log('Ошибка. Запрос не выполнен: ', err)
+    )}
+}
+
 // @todo: Удалить карточку
 export function handleCardDelete(cloneCard) {
     cloneCard.remove();

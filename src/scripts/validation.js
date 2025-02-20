@@ -1,4 +1,13 @@
 // @todo: Валидация формы
+export const validationConfig = {
+  formElement: '.popup__form',
+  inputElement: '.popup__input',
+  buttonElement: '.popup__button',
+  buttonElementdisabled: 'popup__button_disabled',
+  errorMessage: 'popup__input_type_error',
+  errorClass: 'popup__error_visible'
+};
+
 const showInputError = (formElement, inputElement, errorMessage) => {
   const errorElement = formElement.querySelector('.popup__input_type_error');
   errorElement.textContent = errorMessage;

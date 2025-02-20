@@ -1,8 +1,8 @@
 import { initialCards } from './scripts/cards.js';
 import '../src/pages/index.css';
-import { createCard, handleLikeCard, handleCardDelete } from './scripts/card.js';
+import { createCard, handleLikeCard, handleCardDelete, handleLikesCount } from './scripts/card.js';
 import { openPopup, closePopup, addOverlayListener } from './scripts/modal.js';
-import { clearValidation, enableValidation } from './scripts/validation.js';
+import { clearValidation, enableValidation, validationConfig } from './scripts/validation.js';
 import { getUserInfo, patchUserInfo, getInitialCards, createNewCard, cardsAPI } from './scripts/api.js';
 
 // @todo: DOM узлы
@@ -38,9 +38,13 @@ formEdit.addEventListener('submit', (evt) => {
   const jobValue = jobInput.value; 
   profileName.textContent = nameValue;
   profileDescription.textContent = jobValue;
+  enableValidation(validationConfig);
   formEdit.reset();
   closePopup(popupProfileEdit);
 });
+
+// @todo: Форма изменения аватара
+
 
 // @todo: Кнопка закрытия
 popupCloseButtons.forEach(button => {
@@ -71,6 +75,7 @@ function submitFormNewCard() {
 formAdd.addEventListener('submit', (evt) => {
   evt.preventDefault();
   submitFormNewCard();
+  enableValidation(validationConfig);
   formAdd.reset();
   closePopup(popupNewCard);
 });
@@ -89,17 +94,6 @@ function handleImageClick(cardImage, cardTitle) {
 popups.forEach (function (popup) {
   addOverlayListener(popup);
 });
-
-// @todo: Валидация инпута
-
-enableValidation({
-  formSelector: '.popup__form',
-  inputSelector: '.popup__input',
-  submitButtonSelector: '.popup__button',
-  inactiveButtonClass: 'popup__button_disabled',
-  inputErrorClass: 'popup__input_type_error',
-  errorClass: 'popup__error_visible'
-}); 
 
 // @todo: Запросы карточек API 
 getInitialCards().then((data) => {
