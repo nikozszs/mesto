@@ -46,7 +46,7 @@ Promise.all([getInitialCards(), getUserInfo()])
   });
 
 // @todo: Редактирование профиля PATCH
-export const patchUserInfo = () => {
+const patchUserInfo = () => {
     return fetch(`${config.baseUrl}/users/me`, {
       method: 'PATCH',
       headers: {
@@ -82,8 +82,8 @@ export const createCardOnServer = () => {
 }
 
 // @todo: Отображение количества лайков карточки GET
-export const getLikes = (cardId) => {
-    return fetch(`${config.baseUrl}/${cardId}`, {
+const getLikes = (cardId) => {
+    return fetch(`${config.baseUrl}/cards/${cardId}`, {
       method: 'GET',
       headers: {
         authorization: config.headers.authorization,
@@ -121,14 +121,62 @@ Promise.all([createCardOnServer()])
     console.log('Ошибка. Запрос не выполнен: ', err);
 });
 
-// @todo: CARDS API
-const makeCrudAPI = (base) => ({
-    getList: (query) => get(base + "/" + stringifyQuery(query)),
-    getItem: (id) => get(base + `/${id}`),
-    createItem: (data) => postMessage(base + "/", data),
-    updateItem: (id, data, isPatch = false) => 
-        post(base + `/${id}`, data, isPatch ? "PATCH" : "PUT"),
-    deleteItem: (id) => post(base + `/${id}`, {}, "DELETE")
-});
+// @todo: Удаление карточки на сервере DELETE
+export const deleteCardOnServer = (cardId) => {
+  return fetch(`${config.baseUrl}/cards/${cardId}`, {
+    method: 'DELETE',
+    headers: {
+      authorization: config.headers.authorization,
+      'Content-Type': 'application/json'
+    },
+  }).then(handleResponse)
+    .then((data) => {
+      const likesCount = data.likes.length;
+      return likesCount;
+    })
+    .catch((err) => {
+      console.log('Ошибка. Запрос не выполнен: ', err);
+  }); 
+}
 
-export const cardsAPI = makeCrudAPI("/cards");
+// @todo: фун для обработки удаления карточки DELETE
+const openDeleteConfirmationPopup = (onConfirm) => {
+  const popup = document.querySelector('.popup_type_confirm-delete');
+  const confirmButton = popup.querySelector('.popup__confirm-button');
+
+  const handleConfirm = () => {
+    onConfirm();
+    closePopup(popup);
+  };
+
+  confirmButton.addEventListener('click', handleConfirm);
+  openPopup(popup);
+};
+
+const handleCardDelete = (cardId) => {
+  openDeleteConfirmationPopup(() => {
+    deleteCardOnServer(cardId)
+      .then(() => {
+        const cardElement = document.querySelector(`[data-card-id="${cardId}"]`);
+        if (cardElement) {
+          cardElement.remove();
+        }
+        console.log('Карточка успешно удалена');
+      })
+      .catch((err) => {
+        console.log('Ошибка при удалении карточки:', err);
+      });
+  });
+};
+
+// // @todo: CARDS API
+// const makeCrudAPI = (base) => ({
+//     getList: (query) => get(base + "/" + stringifyQuery(query)),
+//     getItem: (id) => get(base + `/${id}`),
+//     createItem: (data) => postMessage(base + "/", data),
+//     updateItem: (id, data, isPatch = false) => 
+//         post(base + `/${id}`, data, isPatch ? "PATCH" : "PUT"),
+//     deleteItem: (id) => post(base + `/${id}`, {}, "DELETE")
+// });
+
+// export const cardsAPI = makeCrudAPI("/cards");

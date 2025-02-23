@@ -9,14 +9,12 @@ export const createCard = (card, deleteButtonFunction, handleLikeCard, handleIma
     cardTitle.textContent = card.name;
     cardImage.src = card.link;
 
+    cloneCard.dataset.cardId = card._id;
     const deleteButton = cloneCard.querySelector('.card__delete-button');
-    if (cloneCard.ownerId === currentUserId) {
-        deleteButton.addEventListener ('click', () => {
-            deleteButtonFunction(cloneCard);
-        }); 
-    } else {
-        deleteButton.style.display = 'none';
-    }
+    deleteButton.addEventListener ('click', () => {
+        
+        deleteButtonFunction(cloneCard);
+    });
     
     const buttonLike = cloneCard.querySelector('.card__like-button');
     buttonLike.addEventListener ('click', handleLikeCard);
@@ -62,4 +60,3 @@ export function handleLikesCount(likeCount, buttonLike, cards) {
 export function handleCardDelete(cloneCard) {
     cloneCard.remove();
 }
-  
