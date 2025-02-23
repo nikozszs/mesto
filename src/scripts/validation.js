@@ -45,7 +45,7 @@ const toggleButtonState = (inputList, buttonElement, buttonElementdisabled) => {
   }
 };
 
-export const setEventListeners = (formElement) => {
+const setEventListeners = (formElement) => {
   const inputList = Array.from(formElement.querySelectorAll('.popup__input'));
   const buttonElement = formElement.querySelector('.popup__button');
   toggleButtonState(inputList, buttonElement);

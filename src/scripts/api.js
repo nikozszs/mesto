@@ -14,7 +14,7 @@ export const getUserInfo = () => {
       return fetch(`${config.baseUrl}/users/me`, {
         method: 'GET',
         headers: {
-          authorization: "865b937a-fd53-4f83-93da-735ab4a82871",
+          authorization: config.headers.authorization,
           'Content-Type': 'application/json'
         }
       }).then(handleResponse)
@@ -28,7 +28,7 @@ export const getInitialCards = () => {
       return fetch(`${config.baseUrl}/cards`, {
         method: 'GET',
         headers: {
-          authorization: '865b937a-fd53-4f83-93da-735ab4a82871',
+          authorization: config.headers.authorization,
           'Content-Type': 'application/json'
         }
       }).then(handleResponse)
@@ -50,7 +50,7 @@ export const patchUserInfo = () => {
     return fetch(`${config.baseUrl}/users/me`, {
       method: 'PATCH',
       headers: {
-        authorization: "865b937a-fd53-4f83-93da-735ab4a82871",
+        authorization: config.headers.authorization,
         'Content-Type': 'application/json'
       },
       body: JSON.stringify({
@@ -64,21 +64,21 @@ export const patchUserInfo = () => {
 }
 
 // @todo: Добавление новой карточки POST
-export const createNewCard = () => {
-    return fetch(`${config.baseUrl}/cards`, {
-      method: 'POST',
-      headers: {
-        authorization: '865b937a-fd53-4f83-93da-735ab4a82871',
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify({
-        name: "",
-        link: ""
-      }),
-    }).then(handleResponse)
-      .catch((err) => {
-        console.log('Ошибка. Запрос не выполнен: ', err);
-    }); 
+export const createCardOnServer = () => {
+  return fetch(`${config.baseUrl}/cards`, {
+    method: 'POST',
+    headers: {
+      authorization: config.headers.authorization,
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({
+      name: "Пример",
+      link: "Ссылка"
+    }),
+  }).then(handleResponse)
+    .catch((err) => {
+      console.log('Ошибка. Запрос не выполнен: ', err);
+  }); 
 }
 
 // @todo: Отображение количества лайков карточки GET
@@ -86,28 +86,40 @@ export const getLikes = (cardId) => {
     return fetch(`${config.baseUrl}/${cardId}`, {
       method: 'GET',
       headers: {
-        authorization: '865b937a-fd53-4f83-93da-735ab4a82871',
+        authorization: config.headers.authorization,
         'Content-Type': 'application/json'
       },
     }).then(handleResponse)
+      .then((data) => {
+        const likesCount = data.likes.length;
+        return likesCount;
+      })
       .catch((err) => {
         console.log('Ошибка. Запрос не выполнен: ', err);
     }); 
 }
 
-Promise.all([createNewCard(), getLikes()])
-.then(([cards, user]) => {
-    cards.forEach(card => {
-        getLikes(card._id).then(likes => {
-            card.likesCount = likes.length;
-        });
-    });
-    console.log(cards);
-    console.log(user);
-})
-.catch((err) => {
+Promise.all([createCardOnServer()])
+  .then(([card]) => {
+    if (card && card._id) {
+      const promises = [getLikes(card._id)];
+      return Promise.all(promises).then(([likesCount]) => {
+        card.likesCount = likesCount;
+        return card;
+      });
+    } else {
+      console.log('Ошибка: карточка не содержит _id');
+      return null;
+    }
+  })
+  .then((card) => {
+    if (card) {
+      console.log(card);
+    }
+  })
+  .catch((err) => {
     console.log('Ошибка. Запрос не выполнен: ', err);
-}); 
+});
 
 // @todo: CARDS API
 const makeCrudAPI = (base) => ({

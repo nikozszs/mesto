@@ -3,7 +3,7 @@ import '../src/pages/index.css';
 import { createCard, handleLikeCard, handleCardDelete, handleLikesCount } from './scripts/card.js';
 import { openPopup, closePopup, addOverlayListener } from './scripts/modal.js';
 import { clearValidation, enableValidation, validationConfig } from './scripts/validation.js';
-import { getUserInfo, patchUserInfo, getInitialCards, createNewCard, cardsAPI } from './scripts/api.js';
+import { getInitialCards, createCardOnServer} from './scripts/api.js';
 
 // @todo: DOM узлы
 const placesList = document.querySelector('.places__list');
@@ -12,7 +12,7 @@ const popupCloseButtons = document.querySelectorAll('.popup__close');
 
 // @todo: Вывести карточки на страницу
 initialCards.forEach(function (card) {
-  const cloneCard = createCard(card, handleCardDelete, handleLikeCard, handleImageClick);
+  const cloneCard = createCard(card, handleCardDelete, handleLikeCard, handleImageClick, handleLikesCount);
   placesList.append(cloneCard);
 });
 
@@ -69,7 +69,14 @@ function submitFormNewCard() {
     name: newCardNameInput.value,
     link: newCardLinkInput.value
   };
-  document.querySelector('.places__list').appendChild(createCard(newCards, handleCardDelete, handleLikeCard, handleImageClick));
+  createCardOnServer(newCards)
+  .then((createdCard) => {
+    const cardElement = createCard(createdCard, handleCardDelete, handleLikeCard, handleImageClick, handleLikesCount)
+    document.querySelector('.places__list').appendChild(cardElement);
+  })
+  .catch((err) => {
+    console.error('Ошибка при создании карточки:', err);
+  })
 }
 
 formAdd.addEventListener('submit', (evt) => {
@@ -102,38 +109,29 @@ getInitialCards().then((data) => {
     placesList.append(card);
   })
 })
-
-const newCardsData = {
-  title: "полить цветы",
-  completed: false,
-};
-
-createNewCard(newCardsData).then((data) => {
-  console.log(data);
-})
 //чтобы созд карточку, нужно будет получ сам список карточек и инфу о себе как пользователя. 
 //удалять можно ток свои карточки. у карточки будет айдишник владельца карточкию
 //нужно при созд каротчки сверять это ваша каротчка или нет. если ваша - оставлять корзинку, если нет - удаляем корзинку на карточке.
 //для этого нужно долждиться и инфу о пользорвателе и о карточке и будем одновременно работать
 
-// @todo: добавить API чтения
-cardsAPI.getList().then((allCards) => {
-  allCards.forEach(elem => {
-    const newCardAPI = card.createItem(
-      elem.id, 
-      elem.title, 
-      elem.completed)
-  });
-  newCardAPI.append(newCardAPI);
-})
+// // @todo: добавить API чтения
+// cardsAPI.getList().then((allCards) => {
+//   allCards.forEach(elem => {
+//     const newCardAPI = card.createItem(
+//       elem.id, 
+//       elem.title, 
+//       elem.completed)
+//   });
+//   newCardAPI.append(newCardAPI);
+// })
 
-cardsAPI.createItem({
-  title: value,
-  completed: false,
-}).then((newCardAPI) => {
-  newCardAPI.createItem({
-    id: newCardAPI.id,
-    value: newCardAPI.title,
-    input
-  });
-})
+// cardsAPI.createItem({
+//   title: value,
+//   completed: false,
+// }).then((newCardAPI) => {
+//   newCardAPI.createItem({
+//     id: newCardAPI.id,
+//     value: newCardAPI.title,
+//     input
+//   });
+// })
