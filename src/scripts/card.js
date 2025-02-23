@@ -12,8 +12,7 @@ export const createCard = (card, deleteButtonFunction, handleLikeCard, handleIma
     cloneCard.dataset.cardId = card._id;
     const deleteButton = cloneCard.querySelector('.card__delete-button');
     deleteButton.addEventListener ('click', () => {
-        
-        deleteButtonFunction(cloneCard);
+        deleteButtonFunction(card._id);
     });
     
     const buttonLike = cloneCard.querySelector('.card__like-button');

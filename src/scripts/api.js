@@ -169,6 +169,51 @@ const handleCardDelete = (cardId) => {
   });
 };
 
+// Постановка лайка PUT
+export const getLikesOnServer = (cardId) => {
+  return fetch(`${config.baseUrl}/cards/likes/${cardId}`, {
+    method: 'PUT',
+    headers: {
+      authorization: config.headers.authorization,
+      'Content-Type': 'application/json'
+    },
+  }).then(handleResponse)
+    .catch((err) => {
+      console.log('Ошибка. Запрос не выполнен: ', err);
+  }); 
+}
+
+// Cнятие лайка DELETE
+export const deleteLikes = (cardId) => {
+  return fetch(`${config.baseUrl}/cards/likes/${cardId}`, {
+    method: 'DELETE',
+    headers: {
+      authorization: config.headers.authorization,
+      'Content-Type': 'application/json'
+    },
+  }).then(handleResponse)
+    .catch((err) => {
+      console.log('Ошибка. Запрос не выполнен: ', err);
+  }); 
+}
+
+// Обновление аватара пользователя PATCH
+export const patchAvatar = (avatarUrl) => {
+  return fetch(`${config.baseUrl}/users/me/avatar`, {
+    method: 'PATCH',
+    headers: {
+      authorization: config.headers.authorization,
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({ avatar: avatarUrl }),
+  })
+  .then(handleResponse)
+    .catch((err) => {
+      console.log('Ошибка. Запрос не выполнен: ', err);
+  }); 
+}
+
+
 // // @todo: CARDS API
 // const makeCrudAPI = (base) => ({
 //     getList: (query) => get(base + "/" + stringifyQuery(query)),
