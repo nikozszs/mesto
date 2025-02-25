@@ -2,7 +2,7 @@
     color: #C4C4C4;
 }
   
-.popup__error_visible:invalid {
+.popup__error_visible {
     border-bottom: 1px solid red;
     color: red;
 }

@@ -18,8 +18,8 @@ export const getUserInfo = () => {
           'Content-Type': 'application/json'
         }
       }).then(handleResponse)
-        .catch((err) => {
-          console.log('Ошибка. Запрос не выполнен: ', err);
+      .catch((err) => {
+        console.log('Ошибка. Запрос не выполнен: ', err);
       }); 
 }
 
@@ -72,8 +72,8 @@ export const createCardOnServer = () => {
       'Content-Type': 'application/json'
     },
     body: JSON.stringify({
-      name: "Пример",
-      link: "Ссылка"
+      name: "",
+      link: ""
     }),
   }).then(handleResponse)
     .catch((err) => {
@@ -89,6 +89,9 @@ const getLikes = (cardId) => {
         authorization: config.headers.authorization,
         'Content-Type': 'application/json'
       },
+      body: JSON.stringify({
+        _id: ""
+      }),
     }).then(handleResponse)
       .then((data) => {
         const likesCount = data.likes.length;

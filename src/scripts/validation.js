@@ -9,16 +9,16 @@ export const validationConfig = {
 };
 
 const showInputError = (formElement, inputElement, errorMessage) => {
-  const errorElement = formElement.querySelector('.popup__input_type_error');
-  errorElement.textContent = errorMessage;
-  errorElement.classList.add('popup__error_visible');
+  const errorClass = formElement.querySelector('.popup__input_type_error');
+  errorClass.textContent = errorMessage;
+  errorClass.classList.add('popup__error_visible');
 };
   
 const hideInputError = (formElement, inputElement) => {
-  const errorElement = formElement.querySelector('.popup__input_type_error');
+  const errorClass = formElement.querySelector('.popup__input_type_error');
   inputElement.classList.remove('popup__input_type_error');
-  errorElement.classList.remove('popup__error_visible');
-  errorElement.textContent = '';
+  errorClass.classList.remove('popup__error_visible');
+  errorClass.textContent = '';
 };
   
 export const clearValidation = (formElement, inputElement) => {

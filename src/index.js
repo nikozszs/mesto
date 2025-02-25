@@ -43,8 +43,25 @@ formEdit.addEventListener('submit', (evt) => {
   closePopup(popupProfileEdit);
 });
 
-// @todo: Форма изменения аватара
+// @todo: Форма обновления аватара
+const formAvatar = document.forms['edit-avatar'];
+const popupAvatar = document.querySelector('.popup_type_edit-avatar');
+const profileAvatar = document.querySelector('.profile__image');
+const avatarUrlInput = document.querySelector('.popup__input_type_edit-avatar')
 
+profileAvatar.addEventListener('click', () => {
+  clearValidation(formAvatar, validationConfig);
+  openPopup(popupAvatar);
+});
+
+formAvatar.addEventListener('submit', (evt) => {
+  evt.preventDefault();
+  const avatarValue = avatarUrlInput.value
+  profileAvatar.src = avatarValue;
+  enableValidation(validationConfig);
+  formAvatar.reset();
+  closePopup(popupAvatar);
+});
 
 // @todo: Кнопка закрытия
 popupCloseButtons.forEach(button => {
