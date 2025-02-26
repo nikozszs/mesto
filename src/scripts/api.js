@@ -5,90 +5,75 @@ const config = {
       'Content-Type': 'application/json'
     }
 }
+
 const handleResponse = (response) => {
+  if (response.ok) {
     return response.json();
-}
+  }
+  return Promise.reject(`Ошибка: ${response.status}`);
+};
 
 // @todo: Загрузка информации о пользователе с сервера GET
 export const getUserInfo = () => {
       return fetch(`${config.baseUrl}/users/me`, {
         method: 'GET',
-        headers: {
-          authorization: config.headers.authorization,
-          'Content-Type': 'application/json'
-        }
+        headers: config.headers,
       }).then(handleResponse)
-      .catch((err) => {
-        console.log('Ошибка. Запрос не выполнен: ', err);
-      }); 
 }
+
+// @todo: Функция GET
+export function updateUserInfo(user) {
+  const userName = document.querySelector('.profile__title');
+  const userDescription = document.querySelector('.profile__description')
+
+  userName.textContent = user.name;
+  userDescription.textContent = user.description;
+}
+getUserInfo()
+.then((user) => {
+  updateUserInfo(user);
+})
+.catch((err) => {
+  console.log('Ошибка при загрузке данных пользователя:', err);
+})
 
 // @todo: Загрузка карточек с сервера GET
 export const getInitialCards = () => {
       return fetch(`${config.baseUrl}/cards`, {
         method: 'GET',
-        headers: {
-          authorization: config.headers.authorization,
-          'Content-Type': 'application/json'
-        }
+        headers: config.headers,
       }).then(handleResponse)
-        .catch((err) => {
-          console.log('Ошибка. Запрос не выполнен: ', err);
-      }); 
 }
 
-Promise.all([getInitialCards(), getUserInfo()])
-  .then(([allCards, user]) => {
-    return ({allCards, user})
-  })
-  .catch((err) => {
-    console.log('Ошибка. Запрос не выполнен: ', err);
-  });
-
 // @todo: Редактирование профиля PATCH
-const patchUserInfo = () => {
+export function updateProfileInfo (name, description) {
     return fetch(`${config.baseUrl}/users/me`, {
       method: 'PATCH',
-      headers: {
-        authorization: config.headers.authorization,
-        'Content-Type': 'application/json'
-      },
+      headers: config.headers,
       body: JSON.stringify({
-        name: 'Marie Skłodowska Curie',
-        about: 'Physicist and Chemist'
+        name: name,
+        about: description
       })
     }).then(handleResponse)
-      .catch((err) => {
-        console.log('Ошибка. Запрос не выполнен: ', err);
-    }); 
 }
 
 // @todo: Добавление новой карточки POST
-export const createCardOnServer = () => {
+export function createCardOnServer (name, link) {
   return fetch(`${config.baseUrl}/cards`, {
     method: 'POST',
-    headers: {
-      authorization: config.headers.authorization,
-      'Content-Type': 'application/json'
-    },
+    headers: config.headers,
     body: JSON.stringify({
-      name: "",
-      link: ""
+      name: name,
+      link: link
     }),
   }).then(handleResponse)
-    .catch((err) => {
-      console.log('Ошибка. Запрос не выполнен: ', err);
-  }); 
 }
 
 // @todo: Отображение количества лайков карточки GET
 const getLikes = (cardId) => {
     return fetch(`${config.baseUrl}/cards/${cardId}`, {
       method: 'GET',
-      headers: {
-        authorization: config.headers.authorization,
-        'Content-Type': 'application/json'
-      },
+      headers: config.headers,
       body: JSON.stringify({
         _id: ""
       }),
@@ -97,9 +82,6 @@ const getLikes = (cardId) => {
         const likesCount = data.likes.length;
         return likesCount;
       })
-      .catch((err) => {
-        console.log('Ошибка. Запрос не выполнен: ', err);
-    }); 
 }
 
 Promise.all([createCardOnServer()])
@@ -128,18 +110,12 @@ Promise.all([createCardOnServer()])
 export const deleteCardOnServer = (cardId) => {
   return fetch(`${config.baseUrl}/cards/${cardId}`, {
     method: 'DELETE',
-    headers: {
-      authorization: config.headers.authorization,
-      'Content-Type': 'application/json'
-    },
+    headers: config.headers,
   }).then(handleResponse)
     .then((data) => {
       const likesCount = data.likes.length;
       return likesCount;
     })
-    .catch((err) => {
-      console.log('Ошибка. Запрос не выполнен: ', err);
-  }); 
 }
 
 // @todo: фун для обработки удаления карточки DELETE
@@ -176,55 +152,23 @@ const handleCardDelete = (cardId) => {
 export const getLikesOnServer = (cardId) => {
   return fetch(`${config.baseUrl}/cards/likes/${cardId}`, {
     method: 'PUT',
-    headers: {
-      authorization: config.headers.authorization,
-      'Content-Type': 'application/json'
-    },
+    headers: config.headers,
   }).then(handleResponse)
-    .catch((err) => {
-      console.log('Ошибка. Запрос не выполнен: ', err);
-  }); 
 }
 
 // Cнятие лайка DELETE
 export const deleteLikes = (cardId) => {
   return fetch(`${config.baseUrl}/cards/likes/${cardId}`, {
     method: 'DELETE',
-    headers: {
-      authorization: config.headers.authorization,
-      'Content-Type': 'application/json'
-    },
+    headers: config.headers,
   }).then(handleResponse)
-    .catch((err) => {
-      console.log('Ошибка. Запрос не выполнен: ', err);
-  }); 
 }
 
 // Обновление аватара пользователя PATCH
-export const patchAvatar = (avatarUrl) => {
+export const patchAvatar = (avatarValue) => {
   return fetch(`${config.baseUrl}/users/me/avatar`, {
     method: 'PATCH',
-    headers: {
-      authorization: config.headers.authorization,
-      'Content-Type': 'application/json'
-    },
-    body: JSON.stringify({ avatar: avatarUrl }),
-  })
-  .then(handleResponse)
-    .catch((err) => {
-      console.log('Ошибка. Запрос не выполнен: ', err);
-  }); 
+    headers: config.headers,
+    body: JSON.stringify({ avatar: avatarValue }),
+  }).then(handleResponse)
 }
-
-
-// // @todo: CARDS API
-// const makeCrudAPI = (base) => ({
-//     getList: (query) => get(base + "/" + stringifyQuery(query)),
-//     getItem: (id) => get(base + `/${id}`),
-//     createItem: (data) => postMessage(base + "/", data),
-//     updateItem: (id, data, isPatch = false) => 
-//         post(base + `/${id}`, data, isPatch ? "PATCH" : "PUT"),
-//     deleteItem: (id) => post(base + `/${id}`, {}, "DELETE")
-// });
-
-// export const cardsAPI = makeCrudAPI("/cards");
