@@ -1,5 +1,5 @@
 import '../src/pages/index.css';
-import { createCard, handleLikesCount, handleCardDelete } from './scripts/card.js';
+import { createCard, handleLikesCount } from './scripts/card.js';
 import { openPopup, closePopup, addOverlayListener } from './scripts/modal.js';
 import { clearValidation, enableValidation, validationConfig } from './scripts/validation.js';
 import { getInitialCards, createCardOnServer, patchAvatar, getUserInfo, updateProfileInfo} from './scripts/api.js';
@@ -14,7 +14,7 @@ enableValidation(validationConfig);
 function renderCards(allCards, userId) {
   placesList.innerHTML = '';
   allCards.forEach((card) => {
-    const cardElement = createCard(card, userId, handleLikesCount, handleCardDelete, handleImageClick);
+    const cardElement = createCard(card, userId, handleLikesCount, handleImageClick);
     placesList.append(cardElement);
   });
 }
@@ -53,8 +53,8 @@ formEdit.addEventListener('submit', (evt) => {
   updateProfileInfo(nameValue, jobValue)
   .then((user) => {
     updateUserInfo(user);
-    formEdit.reset();
     closePopup(popupProfileEdit);
+    formEdit.reset();
   })
   .catch((err) => {
     console.error('Ошибка при обновлении данных:', err);
@@ -73,9 +73,9 @@ profileAvatar.addEventListener('click', () => {
 });
 
 function submitEditAvatar(evt) {
+  evt.preventDefault();
   const buttonPopup = document.querySelector('.popup__button');
   buttonPopup.textContent = "Сохранение...";
-  evt.preventDefault();
 
   patchAvatar(avatarValue)
   .then((data) => {
@@ -85,7 +85,8 @@ function submitEditAvatar(evt) {
     )
     clearValidation(formAvatar, validationConfig);
     formAvatar.reset();
-    closePopup(evt.target.closest('.popup'));
+    closePopup(popupAvatar);
+    formAvatar.reset();
     buttonPopup.textContent = 'Сохранить';
   })
   .catch((err) => {
@@ -97,6 +98,8 @@ formAvatar.addEventListener('submit', (evt) => {
   evt.preventDefault();
   const avatarValue = avatarInput.value
   profileAvatar.src = avatarValue;
+  submitEditAvatar();
+  patchAvatar(avatarValue);
   closePopup(popupAvatar);
   formAvatar.reset();
 });
@@ -164,33 +167,3 @@ function updateUserInfo(user) {
   userName.textContent = user.name;
   userDescription.textContent = user.description;
 }
-
-// @todo: фун для обработки удаления карточки DELETE
-const openDeleteConfirmationPopup = (onConfirm) => {
-  const popup = document.querySelector('.popup_type_confirm-delete');
-  const confirmButton = popup.querySelector('.popup__confirm-button');
-
-  const handleConfirm = () => {
-    onConfirm();
-    closePopup(popup);
-  };
-
-  confirmButton.addEventListener('click', handleConfirm);
-  openPopup(popup);
-};
-
-const handleCardDeleteId = (cardId) => {
-  openDeleteConfirmationPopup(() => {
-    deleteCardOnServer(cardId)
-      .then(() => {
-        const cardElement = document.querySelector(`[data-card-id="${cardId}"]`);
-        if (cardElement) {
-          cardElement.remove();
-        }
-        console.log('Карточка успешно удалена');
-      })
-      .catch((err) => {
-        console.log('Ошибка при удалении карточки:', err);
-      });
-  });
-};

@@ -1,8 +1,9 @@
 .popup__input_type_error {
-    color: #C4C4C4;
+    color: #000;
 }
   
 .popup__error_visible {
-    border-bottom: 1px solid red;
     color: red;
+    font-size: 12px;
+    line-height: 14.5px;
 }

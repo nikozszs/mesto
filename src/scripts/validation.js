@@ -24,11 +24,17 @@ const hideInputError = (formElement, inputElement, validationConfig) => {
 };
   
 const validity = (formElement, inputElement, validationConfig) => {
-    if (!inputElement.validity.valid) {
-      showInputError(formElement, inputElement, errorMessage, validationConfig);
-    } else {
-        hideInputError(formElement, inputElement, validationConfig);
-    }
+  if (inputElement.validity.patternMismatch) {
+    inputElement.setCustomValidity(inputElement.dataset.errorMessage);
+  } else {
+    inputElement.setCustomValidity("");
+  }
+
+  if (!inputElement.validity.valid) {
+    showInputError(formElement, inputElement, inputElement.validationMessage, validationConfig);
+  } else {
+    hideInputError(formElement, inputElement, validationConfig);
+  }
 };
 
 const toggleButtonState = (inputList, buttonElement, validationConfig) => {
@@ -60,7 +66,7 @@ export const enableValidation = (validationConfig) => {
     });
     const fieldsetList = Array.from(formElement.querySelectorAll(validationConfig.formElement));
       fieldsetList.forEach((fieldSet) => {
-        setEventListeners(fieldSet, validationConfig);
+        clearValidation(fieldSet, validationConfig);
       });
     });
 };

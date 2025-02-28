@@ -64,26 +64,11 @@ const getLikes = (_id) => {
     }).then(handleResponse)
 }
 
-// @todo: Удаление карточки на сервере DELETE
-export const deleteCardOnServer = (cardId) => {
-  return fetch(`${config.baseUrl}/cards/${cardId}`, {
-    method: 'DELETE',
-    headers: config.headers,
-  }).then(handleResponse)
-}
-
 // Постановка лайка PUT
-export const getLikesOnServer = (cardId) => {
+export const toggleLike = (cardId, isLiked) => {
+  const method = isLiked ? 'DELETE' : 'PUT';
   return fetch(`${config.baseUrl}/cards/likes/${cardId}`, {
-    method: 'PUT',
-    headers: config.headers,
-  }).then(handleResponse)
-}
-
-// Cнятие лайка DELETE
-export const deleteLikes = (cardId) => {
-  return fetch(`${config.baseUrl}/cards/likes/${cardId}`, {
-    method: 'DELETE',
+    method: method,
     headers: config.headers,
   }).then(handleResponse)
 }
