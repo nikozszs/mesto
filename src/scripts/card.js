@@ -25,14 +25,14 @@ export const createCard = (card, deleteButtonFunction, handleImageClick, handleL
         handleImageClick(cardImage, cardTitle);
     });
 
-    const likeCount = cardElement.querySelector('.card__like-counter');
-    likeCount.textContent = card.likes.length;
-    if (card.likes.some((like) => like._id === userId)) {
-        buttonLike.classList.add('card__like-button_is-active');
-      }
-      if (card.owner._id !== userId) {
-        deleteButton.remove();
-      }
+    // const likeCount = cardElement.querySelector('.card__like-counter');
+    // likeCount.textContent = card.likes.length;
+    // if (card.likes.some((like) => like._id === userId)) {
+    //     buttonLike.classList.add('card__like-button_is-active');
+    //   }
+    //   if (card.owner._id !== userId) {
+    //     deleteButton.remove();
+    //   }
   return cloneCard; 
 }
 

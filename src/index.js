@@ -2,18 +2,19 @@ import '../src/pages/index.css';
 import { createCard, handleLikesCount, handleCardDelete } from './scripts/card.js';
 import { openPopup, closePopup, addOverlayListener } from './scripts/modal.js';
 import { clearValidation, enableValidation, validationConfig } from './scripts/validation.js';
-import { getInitialCards, createCardOnServer, patchAvatar, getUserInfo, updateUserInfo, updateProfileInfo} from './scripts/api.js';
+import { getInitialCards, createCardOnServer, patchAvatar, getUserInfo, updateProfileInfo} from './scripts/api.js';
 
 // @todo: DOM узлы
 const placesList = document.querySelector('.places__list');
 const popups = document.querySelectorAll('.popup');
 const popupCloseButtons = document.querySelectorAll('.popup__close');
+enableValidation(validationConfig);
 
 // @todo: Вывести карточки на страницу
 function renderCards(allCards, userId) {
   placesList.innerHTML = '';
   allCards.forEach((card) => {
-    const cardElement = createCard(card, userId, handleLikesCount, handleCardDelete);
+    const cardElement = createCard(card, userId, handleLikesCount, handleCardDelete, handleImageClick);
     placesList.append(cardElement);
   });
 }
@@ -52,7 +53,6 @@ formEdit.addEventListener('submit', (evt) => {
   updateProfileInfo(nameValue, jobValue)
   .then((user) => {
     updateUserInfo(user);
-    enableValidation(validationConfig);
     formEdit.reset();
     closePopup(popupProfileEdit);
   })
@@ -82,16 +82,14 @@ function submitEditAvatar(evt) {
     avatarValue.setAttribute(
       'style',
       `background-image: url(${data.avatar})`
-    );
-  })
-  .catch((err) => {
-    console.log(err);
-  })
-  .finnaly(() => {
+    )
     clearValidation(formAvatar, validationConfig);
     formAvatar.reset();
     closePopup(evt.target.closest('.popup'));
     buttonPopup.textContent = 'Сохранить';
+  })
+  .catch((err) => {
+    console.log(err);
   })
 }
 
@@ -99,7 +97,6 @@ formAvatar.addEventListener('submit', (evt) => {
   evt.preventDefault();
   const avatarValue = avatarInput.value
   profileAvatar.src = avatarValue;
-  enableValidation(validationConfig);
   closePopup(popupAvatar);
   formAvatar.reset();
 });
@@ -118,7 +115,6 @@ const newCardNameInput = popupNewCard.querySelector(".popup__input_type_card-nam
 const newCardLinkInput = popupNewCard.querySelector(".popup__input_type_url");
 
 profileAddButton.addEventListener('click', () => {
-  clearValidation(formAdd, validationConfig);
   openPopup(popupNewCard);
 });
 
@@ -131,7 +127,7 @@ function submitFormNewCard() {
     const cardElement = createCard(allCards, userId);
     const placesList = document.querySelector('.places__list');
     placesList.prepend(cardElement);
-    enableValidation(validationConfig);
+    clearValidation(formAdd, validationConfig);
     closePopup(popupNewCard);
     formAdd.reset();
   })
@@ -159,3 +155,42 @@ function handleImageClick(cardImage, cardTitle) {
 popups.forEach (function (popup) {
   addOverlayListener(popup);
 });
+
+// @todo: Функция GET
+function updateUserInfo(user) {
+  const userName = document.querySelector('.profile__title');
+  const userDescription = document.querySelector('.profile__description')
+
+  userName.textContent = user.name;
+  userDescription.textContent = user.description;
+}
+
+// @todo: фун для обработки удаления карточки DELETE
+const openDeleteConfirmationPopup = (onConfirm) => {
+  const popup = document.querySelector('.popup_type_confirm-delete');
+  const confirmButton = popup.querySelector('.popup__confirm-button');
+
+  const handleConfirm = () => {
+    onConfirm();
+    closePopup(popup);
+  };
+
+  confirmButton.addEventListener('click', handleConfirm);
+  openPopup(popup);
+};
+
+const handleCardDeleteId = (cardId) => {
+  openDeleteConfirmationPopup(() => {
+    deleteCardOnServer(cardId)
+      .then(() => {
+        const cardElement = document.querySelector(`[data-card-id="${cardId}"]`);
+        if (cardElement) {
+          cardElement.remove();
+        }
+        console.log('Карточка успешно удалена');
+      })
+      .catch((err) => {
+        console.log('Ошибка при удалении карточки:', err);
+      });
+  });
+};

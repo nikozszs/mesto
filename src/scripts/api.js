@@ -21,22 +21,6 @@ export const getUserInfo = () => {
       }).then(handleResponse)
 }
 
-// @todo: Функция GET
-export function updateUserInfo(user) {
-  const userName = document.querySelector('.profile__title');
-  const userDescription = document.querySelector('.profile__description')
-
-  userName.textContent = user.name;
-  userDescription.textContent = user.description;
-}
-getUserInfo()
-.then((user) => {
-  updateUserInfo(user);
-})
-.catch((err) => {
-  console.log('Ошибка при загрузке данных пользователя:', err);
-})
-
 // @todo: Загрузка карточек с сервера GET
 export const getInitialCards = () => {
       return fetch(`${config.baseUrl}/cards`, {
@@ -70,41 +54,15 @@ export function createCardOnServer (name, link) {
 }
 
 // @todo: Отображение количества лайков карточки GET
-const getLikes = (cardId) => {
-    return fetch(`${config.baseUrl}/cards/${cardId}`, {
+const getLikes = (_id) => {
+    return fetch(`${config.baseUrl}/cards/${_id}`, {
       method: 'GET',
       headers: config.headers,
       body: JSON.stringify({
-        _id: ""
+        _id: _id
       }),
     }).then(handleResponse)
-      .then((data) => {
-        const likesCount = data.likes.length;
-        return likesCount;
-      })
 }
-
-Promise.all([createCardOnServer()])
-  .then(([card]) => {
-    if (card && card._id) {
-      const promises = [getLikes(card._id)];
-      return Promise.all(promises).then(([likesCount]) => {
-        card.likesCount = likesCount;
-        return card;
-      });
-    } else {
-      console.log('Ошибка: карточка не содержит _id');
-      return null;
-    }
-  })
-  .then((card) => {
-    if (card) {
-      console.log(card);
-    }
-  })
-  .catch((err) => {
-    console.log('Ошибка. Запрос не выполнен: ', err);
-});
 
 // @todo: Удаление карточки на сервере DELETE
 export const deleteCardOnServer = (cardId) => {
@@ -112,41 +70,7 @@ export const deleteCardOnServer = (cardId) => {
     method: 'DELETE',
     headers: config.headers,
   }).then(handleResponse)
-    .then((data) => {
-      const likesCount = data.likes.length;
-      return likesCount;
-    })
 }
-
-// @todo: фун для обработки удаления карточки DELETE
-const openDeleteConfirmationPopup = (onConfirm) => {
-  const popup = document.querySelector('.popup_type_confirm-delete');
-  const confirmButton = popup.querySelector('.popup__confirm-button');
-
-  const handleConfirm = () => {
-    onConfirm();
-    closePopup(popup);
-  };
-
-  confirmButton.addEventListener('click', handleConfirm);
-  openPopup(popup);
-};
-
-const handleCardDelete = (cardId) => {
-  openDeleteConfirmationPopup(() => {
-    deleteCardOnServer(cardId)
-      .then(() => {
-        const cardElement = document.querySelector(`[data-card-id="${cardId}"]`);
-        if (cardElement) {
-          cardElement.remove();
-        }
-        console.log('Карточка успешно удалена');
-      })
-      .catch((err) => {
-        console.log('Ошибка при удалении карточки:', err);
-      });
-  });
-};
 
 // Постановка лайка PUT
 export const getLikesOnServer = (cardId) => {
