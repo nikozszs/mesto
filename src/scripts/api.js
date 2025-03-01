@@ -18,7 +18,8 @@ export const getUserInfo = () => {
       return fetch(`${config.baseUrl}/users/me`, {
         method: 'GET',
         headers: config.headers,
-      }).then(handleResponse)
+      })
+      .then(handleResponse)
 }
 
 // @todo: Загрузка карточек с сервера GET
@@ -26,19 +27,21 @@ export const getInitialCards = () => {
       return fetch(`${config.baseUrl}/cards`, {
         method: 'GET',
         headers: config.headers,
-      }).then(handleResponse)
+      })
+      .then(handleResponse)
 }
 
 // @todo: Редактирование профиля PATCH
-export function updateProfileInfo (name, description) {
+export function updateProfileInfo (name, about) {
     return fetch(`${config.baseUrl}/users/me`, {
       method: 'PATCH',
       headers: config.headers,
       body: JSON.stringify({
         name: name,
-        about: description
+        about: about
       })
-    }).then(handleResponse)
+    })
+    .then(handleResponse)
 }
 
 // @todo: Добавление новой карточки POST
@@ -50,7 +53,8 @@ export function createCardOnServer (name, link) {
       name: name,
       link: link
     }),
-  }).then(handleResponse)
+  })
+  .then(handleResponse)
 }
 
 // @todo: Отображение количества лайков карточки GET
@@ -61,7 +65,8 @@ const getLikes = (_id) => {
       body: JSON.stringify({
         _id: _id
       }),
-    }).then(handleResponse)
+    })
+    .then(handleResponse)
 }
 
 // Постановка лайка PUT
@@ -70,7 +75,8 @@ export const toggleLike = (cardId, isLiked) => {
   return fetch(`${config.baseUrl}/cards/likes/${cardId}`, {
     method: method,
     headers: config.headers,
-  }).then(handleResponse)
+  })
+  .then(handleResponse)
 }
 
 // Обновление аватара пользователя PATCH
@@ -79,5 +85,6 @@ export const patchAvatar = (avatarValue) => {
     method: 'PATCH',
     headers: config.headers,
     body: JSON.stringify({ avatar: avatarValue }),
-  }).then(handleResponse)
+  })
+  .then(handleResponse)
 }

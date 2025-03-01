@@ -41,8 +41,10 @@ const toggleButtonState = (inputList, buttonElement, validationConfig) => {
   const hasInvalidInput = inputList.some((inputElement) => !inputElement.validity.valid);
   if (hasInvalidInput) {
     buttonElement.classList.add(validationConfig.buttonDisabledClass);
+    buttonElement.disabled = true;
   } else {
     buttonElement.classList.remove(validationConfig.buttonDisabledClass);
+    buttonElement.disabled = false;
   }
 };
 
@@ -59,14 +61,19 @@ export const clearValidation = (formElement, validationConfig) => {
 };
 
 export const enableValidation = (validationConfig) => {
-    const formList = Array.from(document.querySelectorAll(validationConfig.formElement));
-    formList.forEach((formElement) => {
-      formElement.addEventListener('submit', (evt) => {
+  const formList = Array.from(document.querySelectorAll(validationConfig.formElement));
+  formList.forEach((formElement) => {
+    formElement.addEventListener('submit', (evt) => {
       evt.preventDefault();
     });
-    const fieldsetList = Array.from(formElement.querySelectorAll(validationConfig.formElement));
-      fieldsetList.forEach((fieldSet) => {
-        clearValidation(fieldSet, validationConfig);
+    const inputList = Array.from(formElement.querySelectorAll(validationConfig.inputElement));
+    const buttonElement = formElement.querySelector(validationConfig.buttonElement);
+    toggleButtonState(inputList, buttonElement, validationConfig);
+    inputList.forEach((inputElement) => {
+      inputElement.addEventListener('input', () => {
+        validity(formElement, inputElement, validationConfig);
+        toggleButtonState(inputList, buttonElement, validationConfig);
       });
     });
+  });
 };

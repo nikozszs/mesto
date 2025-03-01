@@ -21,6 +21,14 @@
   }
 }
 
-.popup__input:invalid {
+.popup__input_type_error {
   border-bottom: 1px solid red;
+}
+
+.popup__input:valid {
+  border-bottom: 1px solid #C4C4C4;
+}
+
+.popup__error_visible {
+  border-bottom: none;
 }
