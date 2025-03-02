@@ -44,11 +44,11 @@ export const createCard = (card, deleteButtonFunction, handleImageClick, handleL
 // @todo: Подсчет лайков
 export function handleLikesCount(evt) {
   const buttonLike = evt.currentTarget;
-  const cardElement = buttonLike.closest('.card');
+  const cardElement = buttonLike.querySelector('.card');
   const likeCount = cardElement.querySelector('.card__like-counter');
   const isLiked = buttonLike.classList.contains('card__like-button_is-active');
   const currentCount = parseInt(likeCount.textContent, 100);
-  toggleLike(cardElement.dataset.cardId, isLiked);
+  toggleLike(cardId, isLiked);
   if (isLiked) {
     likeCount.textContent = currentCount - 1;
   } else {
