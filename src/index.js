@@ -160,10 +160,10 @@ const popupTypeImage = document.querySelector('.popup_type_image');
 const popupCaption = document.querySelector('.popup__caption');
 const popupImage = document.querySelector('.popup__image');
 
-function handleImageClick(cardImage, cardTitle) {
-  popupImage.src = cardImage.src;
-  popupImage.alt = cardImage.alt; 
-  popupCaption.textContent = cardTitle.textContent;
+function handleImageClick(link, name) {
+  popupImage.src = link;
+  popupImage.alt = name; 
+  popupCaption.textContent = name;
   openPopup(popupTypeImage);
 }
 

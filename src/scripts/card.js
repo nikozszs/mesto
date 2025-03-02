@@ -16,6 +16,7 @@ export const createCard = (card, deleteButtonFunction, handleImageClick, handleL
     cardImage.alt = card.name;
     cardImage.src = card.link;
     cardTitle.textContent = card.name;
+    cloneCard.dataset.cardId = card._id;
 
     likeCount.textContent = card.likes.length;
     const isLiked = card.likes.some(like => like._id === userId);
@@ -34,7 +35,7 @@ export const createCard = (card, deleteButtonFunction, handleImageClick, handleL
     buttonLike.addEventListener('click', handleLikesCount);
 
     cardImage.addEventListener ('click', () => {
-      handleImageClick(cardImage, cardTitle)
+      handleImageClick(card.link, card.name)
     });
 
   return cloneCard; 
@@ -47,7 +48,7 @@ export function handleLikesCount(evt) {
   const likeCount = cardElement.querySelector('.card__like-counter');
   const isLiked = buttonLike.classList.contains('card__like-button_is-active');
   const currentCount = parseInt(likeCount.textContent, 100);
-  toggleLike(cardId, isLiked);
+  toggleLike(cardElement.dataset.cardId, isLiked);
   if (isLiked) {
     likeCount.textContent = currentCount - 1;
   } else {
