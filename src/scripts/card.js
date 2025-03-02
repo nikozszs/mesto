@@ -13,9 +13,9 @@ export const createCard = (card, deleteButtonFunction, handleImageClick, handleL
     const likeCount = cloneCard.querySelector('.card__like-counter');
     const ownerId = card.owner._id || card.owner;
 
-    cardImage.setAttribute('alt', card.description);
-    cardTitle.textContent = card.name;
+    cardImage.alt = card.name;
     cardImage.src = card.link;
+    cardTitle.textContent = card.name;
 
     likeCount.textContent = card.likes.length;
     const isLiked = card.likes.some(like => like._id === userId);
@@ -34,7 +34,7 @@ export const createCard = (card, deleteButtonFunction, handleImageClick, handleL
     buttonLike.addEventListener('click', handleLikesCount);
 
     cardImage.addEventListener ('click', () => {
-        handleImageClick(cardImage, cardTitle);
+      handleImageClick(cardImage, cardTitle)
     });
 
   return cloneCard; 

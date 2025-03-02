@@ -80,11 +80,11 @@ export const toggleLike = (cardId, isLiked) => {
 }
 
 // Обновление аватара пользователя PATCH
-export const patchAvatar = (avatarValue) => {
+export const patchAvatar = (avatarUrl) => {
   return fetch(`${config.baseUrl}/users/me/avatar`, {
     method: 'PATCH',
     headers: config.headers,
-    body: JSON.stringify({ avatar: avatarValue }),
+    body: JSON.stringify({ avatar: avatarUrl }),
   })
   .then(handleResponse)
 }

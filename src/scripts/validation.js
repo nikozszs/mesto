@@ -37,7 +37,7 @@ const validity = (formElement, inputElement, validationConfig) => {
   }
 };
 
-const toggleButtonState = (inputList, buttonElement, validationConfig) => {
+export const toggleButtonState = (inputList, buttonElement, validationConfig) => {
   const hasInvalidInput = inputList.some((inputElement) => !inputElement.validity.valid);
   if (hasInvalidInput) {
     buttonElement.classList.add(validationConfig.buttonDisabledClass);

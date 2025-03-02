@@ -1,7 +1,7 @@
 import '../src/pages/index.css';
 import { createCard, handleLikesCount } from './scripts/card.js';
 import { openPopup, closePopup, addOverlayListener } from './scripts/modal.js';
-import { clearValidation, enableValidation, validationConfig } from './scripts/validation.js';
+import { clearValidation, enableValidation, validationConfig, toggleButtonState } from './scripts/validation.js';
 import { getInitialCards, createCardOnServer, patchAvatar, getUserInfo, updateProfileInfo} from './scripts/api.js';
 
 // @todo: DOM узлы
@@ -47,10 +47,12 @@ profileEditButton.addEventListener('click', () => {
 const submitEditProfileForm = (evt) => {
   evt.preventDefault();
 
+  const buttonPopup = formEditProfile.querySelector('.popup__button');
   const nameValue = nameInput.value;
   const jobValue = jobInput.value;
   profileName.textContent = nameValue;
   profileDescription.textContent = jobValue;
+  buttonPopup.textContent = "Сохранение...";
 
   updateProfileInfo(nameValue, jobValue)
       .then((user) => {
@@ -60,6 +62,9 @@ const submitEditProfileForm = (evt) => {
       })
       .catch((err) => {
           console.error('Ошибка при обновлении данных:', err);
+      })
+      .finally(() => {
+        buttonPopup.textContent = "Сохранить";
       });
 };
 
@@ -81,20 +86,22 @@ const profileAvatar = document.querySelector('.profile__image');
 const avatarInput = document.querySelector('.popup__input_type_edit-avatar')
 
 profileAvatar.addEventListener('click', () => {
+  avatarInput.value = '';
   clearValidation(formAvatar, validationConfig);
+  toggleButtonState([avatarInput], formAvatar.querySelector('.popup__button'), validationConfig);
   openPopup(popupAvatar);
 });
 
 function submitEditAvatar(evt) {
   evt.preventDefault();
   
-  const buttonPopup = document.querySelector('.popup__button');
+  const buttonPopup = formAvatar.querySelector('.popup__button');
   const avatarValue = avatarInput.value
-  buttonPopup.textContent = "Сохранить";
+  buttonPopup.textContent = "Сохранение...";
 
   patchAvatar(avatarValue)
   .then((data) => {
-    profileAvatar.src = data.avatar
+    profileAvatar.style.backgroundImage = `url(${data.avatar})`;
     closePopup(popupAvatar);
     formAvatar.reset();
     clearValidation(formAvatar, validationConfig);
@@ -103,7 +110,7 @@ function submitEditAvatar(evt) {
     console.log(err);
   })
   .finally(() => {
-    buttonPopup.textContent = "Сохранение...";
+    buttonPopup.textContent = "Сохранить";
   })
 }
 
