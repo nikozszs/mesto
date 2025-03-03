@@ -4,7 +4,7 @@ const getCardTemplate = () => {
     return cardTemplate.querySelector('.card').cloneNode(true);
 };
 
-export const createCard = (card, deleteButtonFunction, handleImageClick, handleLikesCount, userId) => {
+export const createCard = (card, handleImageClick, handleLikesCount, userId) => {
     const cloneCard = getCardTemplate();
     const cardImage = cloneCard.querySelector('.card__image');
     const cardTitle = cloneCard.querySelector('.card__title');
@@ -19,7 +19,7 @@ export const createCard = (card, deleteButtonFunction, handleImageClick, handleL
     cardTitle.textContent = card.name;
     cloneCard.dataset.cardId = card._id;
     likeCount.textContent = card.likes.length;
-    const isLiked = card.likes.some(like => like._id === userId);
+    const isLiked = card.likes.some(like => like.id === userId);
 
     if (isLiked) {
       buttonLike.classList.add('card__like-button_is-active');
@@ -35,14 +35,20 @@ export const createCard = (card, deleteButtonFunction, handleImageClick, handleL
 
     cardImage.addEventListener('click', () => handleImageClick(card.link, card.name));
 
-    buttonLike.addEventListener ('click', () => handleLikesCount(buttonLike, likeCount, cardId));
+    buttonLike.addEventListener ('click', () => handleLikesCount(likeCount, buttonLike, cardId));
   return cloneCard; 
 }
 
 // @todo: Удаление карточки на сервере DELETE
 const deletePopup = document.querySelector('.popup_type_delete-card');
 const popupButton = deletePopup.querySelector('.popup__button');
-export const deleteCard = (card, cardId) => {
+
+popupButton.addEventListener('click', () => {
+  deleteCard(card, cardId)
+  openPopup(deletePopup);
+});
+
+const deleteCard = (card, cardId) => {
   const deleteCardOnServer = () => {
     return fetch(`${config.baseUrl}/cards/${cardId}`, {
       method: 'DELETE',
@@ -58,9 +64,4 @@ export const deleteCard = (card, cardId) => {
       popupButton.removeEventListener('click', deleteCardOnServer);
     });
   }
-
-  popupButton.addEventListener('click', () => {
-    deleteCard(card, cardId)
-    openPopup(deletePopup);
-  })
 }

@@ -14,7 +14,7 @@ enableValidation(validationConfig);
 function renderCards(allCards, userId) {
   placesList.innerHTML = '';
   allCards.forEach((card) => {
-    const cardElement = createCard(card, handleLikesCount, handleImageClick, userId);
+    const cardElement = createCard(card, handleImageClick, handleLikesCount, userId);
     placesList.append(cardElement);
   });
 }
