@@ -69,16 +69,6 @@ const getLikes = (_id) => {
     .then(handleResponse)
 }
 
-// Постановка лайка PUT
-export const toggleLike = (cardId, isLiked) => {
-  const method = isLiked ? 'DELETE' : 'PUT';
-  return fetch(`${config.baseUrl}/cards/likes/${cardId}`, {
-    method: method,
-    headers: config.headers,
-  })
-  .then(handleResponse)
-}
-
 // Обновление аватара пользователя PATCH
 export const patchAvatar = (avatarUrl) => {
   return fetch(`${config.baseUrl}/users/me/avatar`, {

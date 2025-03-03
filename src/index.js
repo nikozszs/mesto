@@ -138,10 +138,10 @@ function submitFormNewCard(evt) {
 
   const name = newCardNameInput.value;
   const link = newCardLinkInput.value;
+
   createCardOnServer(name, link)
   .then((allCards) => {
-    userId = user._id;
-    const cardElement = createCard(allCards, userId);
+    const cardElement = createCard(allCards);
     const placesList = document.querySelector('.places__list');
     placesList.prepend(cardElement);
     closePopup(popupNewCard);
