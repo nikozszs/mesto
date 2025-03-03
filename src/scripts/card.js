@@ -12,6 +12,7 @@ export const createCard = (card, deleteButtonFunction, handleImageClick, handleL
     const buttonLike = cloneCard.querySelector('.card__like-button');
     const likeCount = cloneCard.querySelector('.card__like-counter');
     const ownerId = card.owner._id || card.owner;
+    const cardId = card._id;
 
     cardImage.alt = card.name;
     cardImage.src = card.link;
@@ -32,36 +33,10 @@ export const createCard = (card, deleteButtonFunction, handleImageClick, handleL
       deleteButton.remove();
     }
 
-    cloneCard.addEventListener('click', () => handleImageClick(card.link, card.name));
+    cardImage.addEventListener('click', () => handleImageClick(card.link, card.name));
 
-    cardImage.addEventListener ('click',() => handleLikesCount(card));
+    buttonLike.addEventListener ('click', () => handleLikesCount(buttonLike, likeCount, cardId));
   return cloneCard; 
-}
-
-// @todo: Подсчет лайков
-export function handleLikesCount(card) {
-  const buttonLike = document.querySelector('.card__like-button');
-  const likeCount = document.querySelector('.card__like-counter'); 
-  const isLiked = buttonLike.classList.contains('card__like-button_is-active');
-  const toggleLike = (isLiked) => {
-    const method = isLiked ? 'DELETE' : 'PUT';
-    return fetch(`https://nomoreparties.co/v1/wff-cohort-32/cards/likes/cardId`, {
-      method: method,
-      headers: {
-        authorization: "865b937a-fd53-4f83-93da-735ab4a82871",
-        'Content-Type': 'application/json'
-      }
-    })
-    .then(res => res.json())
-    .then((data) => {
-      likeCount.textContent = data.likes.length;
-      buttonLike.classList.toggle('card__like-button_is-active');
-    })
-    .catch((err) => {
-      console.log('Ошибка при обновлении лайка:', err);
-    });
-  };
-  toggleLike(card, isLiked);
 }
 
 // @todo: Удаление карточки на сервере DELETE

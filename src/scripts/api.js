@@ -69,6 +69,24 @@ const getLikes = (_id) => {
     .then(handleResponse)
 }
 
+// уюрать лайк DELETE
+export const removeLike = (cardId) => {
+  return fetch(`https://nomoreparties.co/v1/wff-cohort-32/cards/likes/${cardId}`, {
+    method: 'DELETE',
+    headers: config.headers,
+  })
+  .then(handleResponse)
+}
+
+// поставить лайк PUT
+export const addLike = (cardId) => {
+  return fetch(`https://nomoreparties.co/v1/wff-cohort-32/cards/likes/${cardId}`, {
+    method: 'PUT',
+    headers: config.headers,
+  })
+  .then(handleResponse)
+}
+
 // Обновление аватара пользователя PATCH
 export const patchAvatar = (avatarUrl) => {
   return fetch(`${config.baseUrl}/users/me/avatar`, {

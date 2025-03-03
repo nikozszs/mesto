@@ -1,8 +1,8 @@
 import '../src/pages/index.css';
-import { createCard, handleLikesCount } from './scripts/card.js';
+import { createCard } from './scripts/card.js';
 import { openPopup, closePopup, addOverlayListener } from './scripts/modal.js';
 import { clearValidation, enableValidation, validationConfig, toggleButtonState } from './scripts/validation.js';
-import { getInitialCards, createCardOnServer, patchAvatar, getUserInfo, updateProfileInfo} from './scripts/api.js';
+import { getInitialCards, createCardOnServer, patchAvatar, getUserInfo, updateProfileInfo, addLike, removeLike} from './scripts/api.js';
 
 // @todo: DOM узлы
 const placesList = document.querySelector('.places__list');
@@ -14,7 +14,7 @@ enableValidation(validationConfig);
 function renderCards(allCards, userId) {
   placesList.innerHTML = '';
   allCards.forEach((card) => {
-    const cardElement = createCard(card, userId, handleLikesCount, handleImageClick);
+    const cardElement = createCard(card, handleLikesCount, handleImageClick, userId);
     placesList.append(cardElement);
   });
 }
@@ -170,3 +170,22 @@ function handleImageClick(link, name) {
 popups.forEach (function (popup) {
   addOverlayListener(popup);
 });
+
+// @todo: Подсчет лайков
+function handleLikesCount(likeCount, buttonLike, cardId) {
+  const isLiked = buttonLike.classList.contains('card__like-button_is-active');
+  if (isLiked) {
+    removeLike(cardId)
+    .then(data => {
+      buttonLike.classList.remove('card__like-button_is-active');
+      likeCount.textContent = data.likes.length;
+    })
+    .catch(err => console.log(err));
+  } else {
+    addLike(cardId)
+    .then(data => {
+      buttonLike.classList.add('card__like-button_is-active');
+      likeCount.textContent = data.likes.length;
+    })
+  }
+}
