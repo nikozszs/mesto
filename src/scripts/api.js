@@ -57,21 +57,21 @@ export function createCardOnServer (name, link) {
   .then(handleResponse)
 }
 
-// @todo: Отображение количества лайков карточки GET
-const getLikes = (_id) => {
-    return fetch(`${config.baseUrl}/cards/${_id}`, {
-      method: 'GET',
-      headers: config.headers,
-      body: JSON.stringify({
-        _id: _id
-      }),
-    })
-    .then(handleResponse)
-}
+// // @todo: Отображение количества лайков карточки GET
+// const getLikes = (_id) => {
+//   return fetch(`${config.baseUrl}/cards/${_id}`, {
+//     method: 'GET',
+//     headers: config.headers,
+//     body: JSON.stringify({
+//       _id: _id
+//     }),
+//   })
+//   .then(handleResponse)
+// }
 
 // уюрать лайк DELETE
 export const removeLike = (cardId) => {
-  return fetch(`https://nomoreparties.co/v1/wff-cohort-32/cards/likes/${cardId}`, {
+  return fetch(`${config.baseUrl}/cards/likes/${cardId}`, {
     method: 'DELETE',
     headers: config.headers,
   })
@@ -80,7 +80,7 @@ export const removeLike = (cardId) => {
 
 // поставить лайк PUT
 export const addLike = (cardId) => {
-  return fetch(`https://nomoreparties.co/v1/wff-cohort-32/cards/likes/${cardId}`, {
+  return fetch(`${config.baseUrl}/cards/likes/${cardId}`, {
     method: 'PUT',
     headers: config.headers,
   })
@@ -96,3 +96,13 @@ export const patchAvatar = (avatarUrl) => {
   })
   .then(handleResponse)
 }
+
+// Удаление карточки DELETE
+export const deleteCardOnServer = (cardId) => {
+    return fetch(`${config.baseUrl}/cards/${cardId}`, {
+      method: 'DELETE',
+      headers: config.headers,
+      body: JSON.stringify({ id: cardId }),
+    })
+    .then(handleResponse)
+  }

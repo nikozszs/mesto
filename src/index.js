@@ -2,7 +2,7 @@ import '../src/pages/index.css';
 import { createCard } from './scripts/card.js';
 import { openPopup, closePopup, addOverlayListener } from './scripts/modal.js';
 import { clearValidation, enableValidation, validationConfig, toggleButtonState } from './scripts/validation.js';
-import { getInitialCards, createCardOnServer, patchAvatar, getUserInfo, updateProfileInfo, addLike, removeLike} from './scripts/api.js';
+import { getInitialCards, deleteCardOnServer, createCardOnServer, patchAvatar, getUserInfo, updateProfileInfo, addLike, removeLike} from './scripts/api.js';
 
 // @todo: DOM узлы
 const placesList = document.querySelector('.places__list');
@@ -14,7 +14,7 @@ enableValidation(validationConfig);
 function renderCards(allCards, userId) {
   placesList.innerHTML = '';
   allCards.forEach((card) => {
-    const cardElement = createCard(card, handleImageClick, handleLikesCount, userId);
+    const cardElement = createCard(card, deleteCard, handleImageClick, handleLikesCount, userId);
     placesList.append(cardElement);
   });
 }
@@ -22,7 +22,7 @@ function renderCards(allCards, userId) {
 Promise.all([getInitialCards(), getUserInfo()])
   .then(([allCards, user]) => {
     updateUserInfo(user);
-    renderCards(allCards, user._id);
+    renderCards(allCards, user.id);
   })
   .catch((err) => {
     console.log('Ошибка. Запрос не выполнен: ', err);
@@ -189,3 +189,26 @@ function handleLikesCount(likeCount, buttonLike, cardId) {
     })
   }
 }
+
+// @todo: Удаление карточки на сервере DELETE
+const deletePopup = document.querySelector('.popup_type_delete-card');
+const popupButton = deletePopup.querySelector('.popup__button');
+
+const deleteCard = (card, cardId, deletePopup) => {
+  deleteCardOnServer(cardId)
+  .then(response => {
+    if (response.ok) {
+        card.remove();
+        closePopup(deletePopup);
+    }
+})
+  .catch(error => console.log('Ошибка:', error))
+  .finally(() => {
+    popupButton.removeEventListener('click', deleteCardOnServer);
+  });
+}
+
+popupButton.addEventListener('click', () => {
+  deleteCard(card, cardId)
+  openPopup(deletePopup);
+});
