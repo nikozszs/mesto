@@ -1,7 +1,7 @@
 const config = {
-    baseUrl: 'https://nomoreparties.co/v1/wff-cohort-32',
+    baseUrl: 'https://nomoreparties.co/v1/wff-cohort-34',
     headers: {
-      authorization: "865b937a-fd53-4f83-93da-735ab4a82871",
+      authorization: "aa25305d-cc4d-48dc-9b4f-5f6c6376e287",
       'Content-Type': 'application/json'
     }
 }
@@ -57,35 +57,35 @@ export function createCardOnServer (name, link) {
   .then(handleResponse)
 }
 
-// // @todo: Отображение количества лайков карточки GET
-// const getLikes = (_id) => {
-//   return fetch(`${config.baseUrl}/cards/${_id}`, {
-//     method: 'GET',
-//     headers: config.headers,
-//     body: JSON.stringify({
-//       _id: _id
-//     }),
-//   })
-//   .then(handleResponse)
-// }
+// @todo: Отображение количества лайков карточки GET
+const getLikes = (_id) => {
+  return fetch(`${config.baseUrl}/cards/${_id}`, {
+    method: 'GET',
+    headers: config.headers,
+    body: JSON.stringify({
+      _id: _id
+    }),
+  })
+  .then(handleResponse)
+}
 
 // уюрать лайк DELETE
-export const removeLike = (cardId) => {
-  return fetch(`${config.baseUrl}/cards/likes/${cardId}`, {
-    method: 'DELETE',
-    headers: config.headers,
-  })
-  .then(handleResponse)
-}
+export const removeLike = (cardId) => { 
+  return fetch(`${config.baseUrl}/cards/likes/${cardId}`, { 
+    method: 'DELETE', 
+    headers: config.headers, 
+  }) 
+  .then(handleResponse) 
+} 
 
 // поставить лайк PUT
-export const addLike = (cardId) => {
-  return fetch(`${config.baseUrl}/cards/likes/${cardId}`, {
-    method: 'PUT',
-    headers: config.headers,
-  })
-  .then(handleResponse)
-}
+export const addLike = (cardId) => { 
+  return fetch(`${config.baseUrl}/cards/likes/${cardId}`, { 
+    method: 'PUT', 
+    headers: config.headers, 
+  }) 
+  .then(handleResponse) 
+} 
 
 // Обновление аватара пользователя PATCH
 export const patchAvatar = (avatarUrl) => {
