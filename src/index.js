@@ -21,8 +21,9 @@ function renderCards(allCards, userId) {
 
 Promise.all([getInitialCards(), getUserInfo()])
   .then(([allCards, user]) => {
+    userId = user._id;
     updateUserInfo(user);
-    renderCards(allCards, user.id);
+    renderCards(allCards, user._id);
   })
   .catch((err) => {
     console.log('Ошибка. Запрос не выполнен: ', err);
@@ -133,15 +134,17 @@ buttonOpenAddCardForm.addEventListener('click', () => {
   openPopup(popupNewCard);
 });
 
+let userId = null;
+
 function submitFormNewCard(evt) {
   evt.preventDefault();
 
   const name = newCardNameInput.value;
   const link = newCardLinkInput.value;
-
+  
   createCardOnServer(name, link)
-  .then((allCards) => {
-    const cardElement = createCard(allCards);
+  .then((card) => {
+    const cardElement = createCard(card, deleteCard, handleImageClick, handleLikesCount, userId);
     const placesList = document.querySelector('.places__list');
     placesList.prepend(cardElement);
     closePopup(popupNewCard);
@@ -196,12 +199,10 @@ const popupButton = deletePopup.querySelector('.popup__button');
 
 const deleteCard = (card, cardId, deletePopup) => {
   deleteCardOnServer(cardId)
-  .then(response => {
-    if (response.ok) {
-        card.remove();
-        closePopup(deletePopup);
-    }
-})
+  .then(() => {
+    card.remove();
+    closePopup(deletePopup);
+  })
   .catch(error => console.log('Ошибка:', error))
   .finally(() => {
     popupButton.removeEventListener('click', deleteCardOnServer);
@@ -209,6 +210,6 @@ const deleteCard = (card, cardId, deletePopup) => {
 }
 
 popupButton.addEventListener('click', () => {
-  deleteCard(card, cardId)
+  deleteCard(card, cardId, deletePopup)
   openPopup(deletePopup);
 });
