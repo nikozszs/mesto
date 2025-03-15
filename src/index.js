@@ -95,9 +95,9 @@ profileAvatar.addEventListener('click', () => {
 
 function submitEditAvatar(evt) {
   evt.preventDefault();
-  
+
+  const avatarValue = avatarInput.value;
   const buttonPopup = formAvatar.querySelector('.popup__button');
-  const avatarValue = avatarInput.value
   buttonPopup.textContent = "Сохранение...";
 
   patchAvatar(avatarValue)
@@ -132,6 +132,7 @@ const newCardLinkInput = popupNewCard.querySelector(".popup__input_type_url");
 
 buttonOpenAddCardForm.addEventListener('click', () => {
   openPopup(popupNewCard);
+  toggleButtonState([newCardNameInput, newCardLinkInput], formAddCard.querySelector('.popup__button'), validationConfig);
 });
 
 let userId = null;
@@ -141,7 +142,9 @@ function submitFormNewCard(evt) {
 
   const name = newCardNameInput.value;
   const link = newCardLinkInput.value;
-  
+  const buttonPopup = formAddCard.querySelector('.popup__button');
+  buttonPopup.textContent = "Сохранение...";
+
   createCardOnServer(name, link)
   .then((card) => {
     const cardElement = createCard(card, deleteCard, handleImageClick, handleLikesCount, userId);
@@ -153,6 +156,9 @@ function submitFormNewCard(evt) {
   })
   .catch((err) => {
     console.error('Ошибка при создании карточки:', err);
+  })
+  .finally(() => {
+    buttonPopup.textContent = "Сохранить";
   })
 }
 
@@ -194,22 +200,10 @@ function handleLikesCount(likeCount, buttonLike, cardId) {
 }
 
 // @todo: Удаление карточки на сервере DELETE
-const deletePopup = document.querySelector('.popup_type_delete-card');
-const popupButton = deletePopup.querySelector('.popup__button');
-
-const deleteCard = (card, cardId, deletePopup) => {
+const deleteCard = (card, cardId) => {
   deleteCardOnServer(cardId)
   .then(() => {
     card.remove();
-    closePopup(deletePopup);
   })
   .catch(error => console.log('Ошибка:', error))
-  .finally(() => {
-    popupButton.removeEventListener('click', deleteCardOnServer);
-  });
 }
-
-popupButton.addEventListener('click', () => {
-  deleteCard(card, cardId, deletePopup)
-  openPopup(deletePopup);
-});

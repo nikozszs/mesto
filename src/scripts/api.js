@@ -57,19 +57,7 @@ export function createCardOnServer (name, link) {
   .then(handleResponse)
 }
 
-// @todo: Отображение количества лайков карточки GET
-const getLikes = (_id) => {
-  return fetch(`${config.baseUrl}/cards/${_id}`, {
-    method: 'GET',
-    headers: config.headers,
-    body: JSON.stringify({
-      _id: _id
-    }),
-  })
-  .then(handleResponse)
-}
-
-// уюрать лайк DELETE
+// убрать лайк DELETE
 export const removeLike = (cardId) => { 
   return fetch(`${config.baseUrl}/cards/likes/${cardId}`, { 
     method: 'DELETE', 

@@ -28,8 +28,7 @@ export const createCard = (card, deleteCard, handleImageClick, handleLikesCount,
     }
 
     if (ownerId === userId) {
-      const deletePopup = document.querySelector('.popup_type_delete-card');
-      deleteButton.addEventListener('click', () => deleteCard(cloneCard, cardId, deletePopup));
+      deleteButton.addEventListener('click', () => deleteCard(cloneCard, cardId));
     } else {
       deleteButton.remove();
     }
